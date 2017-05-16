@@ -1,0 +1,13 @@
+{{template config_path="design/email/header_template"}}
+
+<p>{{trans " %username is requesting a retailer account." username=$data.username }}</p>
+
+<p>{{trans "If you choose to allow this user to have a retailer account make sure that you change his/her <strong>group to %user_role </strong> and select the correct price level the store." user_role=$data.user_role |raw}}</p> 
+
+<p>
+	<strong>{{trans "Name" }}:</strong> {{trans "%username " username=$data.username }}
+	<br>
+	<strong>{{trans "Email" }}:</strong> {{trans "%email " email=$data.email }}
+</p>
+
+{{template config_path="design/email/footer_template"}}

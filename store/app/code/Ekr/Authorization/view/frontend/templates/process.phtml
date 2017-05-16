@@ -1,0 +1,116 @@
+<?php
+$order = $block->getOrder();
+
+if(!$order){
+	echo "<h1>Order Not Found</h1>";
+}else{
+
+	$address = $order->getShippingAddress();
+	if(empty($address)){
+		$address = $order->getBillingAddress();
+	}
+
+?>
+
+<h1>Finalize Order</h1>
+
+<p class="order-date">
+    <?php /* @escapeNotVerified */ echo __('<span class="label">Order Date:</span> %1', '<date>' . $block->formatDate($block->getOrder()->getCreatedAt(), \IntlDateFormatter::LONG) . '</date>') ?>
+</p>
+<p><?= $address->getName() ?><br />
+<?= implode(' ', $address->getStreet())."<br />{$address->getCity()}, {$address->getRegion()} {$address->getPostcode()}" ?></p>
+
+<?php $_giftMessage; ?>
+<div class="table-wrapper order-items">
+    <table class="data table table-order-items" id="my-orders-table" summary="<?php /* @escapeNotVerified */ echo __('Items Ordered') ?>">
+        <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Items Ordered') ?></caption>
+        <thead>
+            <tr>
+                <th class="col name"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
+                <th class="col sku"><?php /* @escapeNotVerified */ echo __('SKU') ?></th>
+                <th class="col price"><?php /* @escapeNotVerified */ echo __('Price') ?></th>
+                <th class="col qty"><?php /* @escapeNotVerified */ echo __('Qty') ?></th>
+                <th class="col subtotal"><?php /* @escapeNotVerified */ echo __('Subtotal') ?></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php 
+        $_items = $order->getItemsCollection(); 
+        $_index = 0;
+        $_count = count($_items);
+        $_giftMessage = '';
+        foreach ($_items as $_item): 
+            $product = $_item->getProduct();
+            $_buyReq = $_item->getBuyRequest();
+        	 ?>
+            
+                <tr id="order-item-row-1">
+                <td class="col name" data-th="Product Name">
+                    <strong class="product name"><?= $_item->getName(); ?></strong>
+                    <?php /*<dl class="item-options">
+                        <?php foreach($_buyReq->getOptions() as $optId => $optVal){
+                            $option = \Magento\Framework\App\ObjectManager::getInstance()->create('Magento\Catalog\Model\Product\Option', ['option_id' => $optId]);
+                            //$option->addFieldToFilter('option_id', $optId);
+                            //$optItem = $option->fetchItem();
+                            var_dump($option->getOptions());
+                            echo $option->getTitle();
+                        }
+                        ?>
+                        <dt>Base Metal</dt>
+                        <dd>Titamium</dd>
+                        <dt>Ring Inlay</dt>
+                        <dd>Meteorite</dd>
+                        <dt>Ring Finish</dt>
+                        <dd>Gloss</dd>
+                        <dt>Ring Size</dt>
+                        <dd>9</dd>
+                    </dl> */ ?>
+                </td>
+                <td class="col sku" data-th="SKU"><?= $_item->getSku(); ?></td>
+                <td class="col price" data-th="Price">
+                    
+                <span class="price-excluding-tax" data-label="Excl. Tax">
+                                <span class="cart-price">
+                                    <span class="price">$<?= number_format($_item->getBasePrice(), 2); ?></span>            </span>
+
+                        </span>
+                </td>
+                <td class="col qty" data-th="Qty">
+                    <span class="title">Ordered</span>
+                    <span class="content"><?= $_item->getQtyToShip() ?></span>
+                </td>
+                <td class="col subtotal" data-th="Subtotal">
+                    
+                <span class="price-excluding-tax" data-label="Excl. Tax">
+                                <span class="cart-price">
+                                    <span class="price">$<?= number_format($_item->getBaseRowTotal(), 2) ?></span>            </span>
+
+                        </span>
+                </td>
+                </tr>
+        <?php endforeach; ?>
+        </tbody>
+        <tfoot>
+            <tr class="subtotal">
+                <th colspan="4" class="mark" scope="row">Subtotal</th>
+                <td class="amount" data-th="Subtotal"><span class="price">$<?= number_format($order->getSubtotal(), 2) ?></span></td>
+            </tr>
+            <tr class="grand_total">
+                <th colspan="4" class="mark" scope="row"><strong>Grand Total</strong></th>
+                <td class="amount" data-th="Grand Total"><strong><span class="price">$<?= number_format($order->getGrandTotal(), 2 ); ?></span></strong></td>
+    </tr>
+            </tfoot>
+    </table>
+    <a href="#" style="float: right;margin-top: 15px;" class="action primary">Sign Order</a>
+</div>
+<?php if ($_giftMessage): ?>
+<script type="text/x-magento-init">
+    {
+        "a.action.show, a.action.close": {
+            "giftMessage": {}
+        }
+    }
+</script>
+<?php endif; ?>
+
+<?php } ?>

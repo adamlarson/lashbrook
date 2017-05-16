@@ -1,0 +1,20 @@
+    <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+   
+   <!-- logger handler --> 
+   <type name="Ekr\Catalog\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <!-- logger -->
+    <type name="Ekr\Catalog\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">EkrLogger</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="system" xsi:type="object">Ekr\Catalog\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Catalog\Controller\Product\View" type="Ekr\Catalog\Controller\Catalog\Product\View" />
+</config>

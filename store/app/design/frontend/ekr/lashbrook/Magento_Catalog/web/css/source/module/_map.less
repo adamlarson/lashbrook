@@ -1,0 +1,177 @@
+& when (@media-common = true) {	
+
+    .product{
+        .address-search-div{
+            display: block;
+            text-align: center;
+            .address-search{
+                display: inline-block;
+                background-color: @color-white;
+                width: 150px;
+                border:1px solid @primary__color;
+                vertical-align: middle;
+                color:@title__color;
+                &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+                  color: @color-gray76;
+                }
+                &::-moz-placeholder { /* Firefox 19+ */
+                  color: @color-gray76;
+                }
+                &:-ms-input-placeholder { /* IE 10+ */
+                  color: @color-gray76;
+                }
+                &:-moz-placeholder { /* Firefox 18- */
+                  color: @color-gray76;
+                }
+            }
+            button.action.primary{
+                font-size: @font-size__s;
+                display: inline-block;
+                padding:4px 15px;
+                border: 1px solid @secondary__color;
+                background-color: @secondary__color;
+            }
+        }
+    }
+
+/*	.storelocations{
+        width:100%; 
+        height:448px;
+    }
+    
+    img.tail{
+        position: absolute;
+        top: 325px;
+        left: 635px;
+        -webkit-transition: opacity 0.5s, width 0.5s, height 0.5s, top 0.5s, left 0.5s;
+        transition: opacity 0.5s, width 0.5s, height 0.5s, top 0.5s, left 0.5s;
+        
+        &.off{
+            opacity: 0;
+            width: 0;
+            height: 0;
+            top: 225px;
+            left: 600px;
+        }
+    }
+    
+    .store-popup{
+        position: absolute;
+        overflow: hidden;
+        width: 450px;
+        height: 225px;
+        top: 100px;
+        background: white;
+        border-radius: 15px;
+        left: 430px;
+        -webkit-transition: opacity 0.5s, width 0.5s, height 0.5s, top 0.5s, left 0.5s;
+        transition: opacity 0.5s, width 0.5s, height 0.5s, top 0.5s, left 0.5s;
+        opacity: 1;
+        
+        &.off{
+            opacity: 0;
+            width: 0;
+            height: 0;
+            top: 200px;
+            left: 600px;
+            
+            img.store-logo{
+                height: 0;
+                -webkit-transition: height 0.2s, width 0.2s;
+                transition: height 0.2s, width 0.2s;
+            }
+        }
+        
+        .fa-close{
+            position: absolute;
+            right: 10px;
+            top: 5px;
+            font-size: 1.7em;
+            color: @primary__color;
+        }
+        
+        h6{
+            color: @title__color;
+            margin: 2px;
+            padding: 0;
+        }
+        
+        p{
+            color: @secondary__color;
+            margin: 2px;
+        }
+        
+        img.store-logo{
+            float: right;
+            height: 115px;
+            margin: 15px 25px;
+            -webkit-transition: height 0.6s, width 0.6s;
+            transition: height 0.6s, width 0.6s;
+        }
+        
+        .store-info{
+            float: left;
+            margin: 15px 0 15px 20px;
+        }
+        
+        .store-collections{
+            clear: both;
+            margin: 20px 15px;
+            p{
+                float: left;
+                width: 30%;
+            }
+        }
+    }
+    //higher specificity to override "default" form styles
+    .product .address-search{
+        display: block;
+        border: none;
+        width: 137px;
+        height: 38px;
+        box-sizing: border-box;
+        margin: 15px auto;
+        background: @primary__color;
+        color: @color-white;
+        border: none;
+        
+        &::-webkit-input-placeholder {
+           color: @color-gray92;
+        }
+
+        &:-moz-placeholder { 
+           color: @color-gray92;  
+        }
+
+        &::-moz-placeholder {  
+           color: @color-gray92;  
+        }
+
+        &:-ms-input-placeholder { 
+           color: @color-gray92;  
+        }
+    }
+
+    #storelocations-container{
+        max-height: 0px;
+        overflow: hidden;
+        -webkit-transition: max-height 0.5s;
+        transition: max-height 0.5s;
+        position: relative;
+        &.show{
+            max-height: 550px;
+        }
+
+        .closer{
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 38px;
+            height: 38px;
+            background-color: rgba(255,255,255, 0.86);
+            text-align: center;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+    }*/
+}

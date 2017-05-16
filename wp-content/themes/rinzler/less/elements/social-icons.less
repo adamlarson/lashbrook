@@ -1,0 +1,22 @@
+.social-icons {
+	text-align: center;
+	i {
+		background-color: @primary-color;
+		border-radius:50%;
+		width: 50px;
+		height: 50px;
+		margin:0 10px 0;
+		.transition(all, @duration);
+		&:before{
+			color:#ffffff;
+			text-align: center;
+			display: block;
+			font-size: 1.5em;
+			padding-top: 15px;
+		}
+		&:hover{
+			background-color: @accent2;
+			.transition(all, @duration);
+		}
+	}
+}

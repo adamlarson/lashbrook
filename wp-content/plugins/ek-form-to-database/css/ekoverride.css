@@ -1,0 +1,92 @@
+div#ekoverride-container .fg-toolbar {
+    background: white;
+    padding: 10px;
+    border-color: #e1e1e1;
+    color: #32373c;
+}
+
+div#ekoverride-container .ui-state-default {
+    background: white;
+    border: 0;
+    position: relative;
+}
+
+div#ekoverride-container td {
+    padding: 15px;
+}
+
+div#ekoverride-container td.sorting_1, div#ekoverride-container td.sorting_2, div#ekoverride-container td.sorting_3 {
+    background: RGBA(0,0,0,0.15);
+}
+
+div#ekoverride-container a {
+    text-decoration: none;
+}
+
+div#ekoverride-container table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+div#ekoverride-container .dataTable, div#ekoverride-container .dataTables_scrollHeadInner {
+    width: 100% !important;
+    border-left: 1px solid #e1e1e1;
+    border-right: 1px solid #e1e1e1;
+}
+
+div#ekoverride-container tr.odd {
+    background: transparent;
+}
+
+div#ekoverride-container {
+    padding-right: 15px;
+}
+
+div#ekoverride-container span.DataTables_sort_icon {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    margin-top: -8px;
+}
+
+div#ekoverride-container .DataTables_sort_wrapper {
+    position: relative;
+    padding: 5px;
+}
+
+div#ekoverride-container button#delete {
+    display: block;
+    margin: auto;
+    margin-bottom: 5px;
+}
+
+div#ekoverride-container th#delete_th span.DataTables_sort_icon {
+    display: none;
+}
+
+/* Details view */
+div.ek-details {
+    margin-right: 15px;
+    max-width: 1040px;
+    border: 1px solid #e1e1e1;
+    margin: 20px 0;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    box-shadow: 0 2px 1px rgba(0,0,0,.04);
+}
+
+.ek-details-col-name {
+    font-weight: bold;
+}
+
+div.ek-details > div {
+    padding: 5px 15px;
+}
+
+.ek-details-col-name {
+    background-color: #EAF2FA;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+div.ek-details-col-data {
+    background: white;
+}

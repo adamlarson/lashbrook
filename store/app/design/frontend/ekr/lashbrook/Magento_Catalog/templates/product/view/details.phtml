@@ -1,0 +1,145 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+$url = $_SERVER['REQUEST_URI'];
+$parts  = explode("/",$url);
+
+$_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$category = $_objectManager->create('Magento\Catalog\Model\Category')->load(@$_GET['category_id']);
+
+//$category = $objectManager->get('Magento\Framework\Registry')->registry('current_category');//get current category
+
+if ($detailedInfoGroup = $block->getGroupChildNames('detailed_info', 'getChildHtml')):?>
+    <div class="product info detailed">
+        <?php $layout = $block->getLayout(); ?>
+        <div class="product data items" data-mage-init='{"tabs":{"openedState":"active"}}'>
+            <?php /*foreach ($detailedInfoGroup as $name):*/ if(false): ?>
+                <?php
+                    $html = $layout->renderElement($name);
+                    if (!trim($html)) {
+                        //continue;
+                    }
+                    $alias = $layout->getElementAlias($name);
+                    $label = $block->getChildData($alias, 'title');
+                ?>
+                <div class="data item title"
+                     aria-labeledby="tab-label-<?php /* @escapeNotVerified */ echo $alias;?>-title"
+                     data-role="collapsible" id="tab-label-<?php /* @escapeNotVerified */ echo $alias;?>">
+                    <a class="data switch"
+                       tabindex="-1"
+                       data-toggle="switch"
+                       href="#<?php /* @escapeNotVerified */ echo $alias; ?>"
+                       id="tab-label-<?php /* @escapeNotVerified */ echo $alias;?>-title">
+                        <?php /* @escapeNotVerified */ echo $label; ?>
+                    </a>
+                </div>
+                <div class="data item content" id="<?php /* @escapeNotVerified */ echo $alias; ?>" data-role="content">
+                    <?php /* @escapeNotVerified */ echo $html; ?>
+                </div>
+            <?php /*endforeach;*/ endif;?>
+            <div id="storelocations-container">
+                <div id="storelocations" class="storelocations"></div>
+                <div class="closer">
+                    <i class="fa fa-close"></i>
+                </div>
+                <div id="store-popup" class="store-popup off">
+                    <i class="fa fa-close"></i>
+                    <div class="store-info">
+                        <h6 class="store-name">
+                            Store Name
+                        </h6>
+                        <p class="store-address">
+                            Address
+                        </p>
+                        <p class="store-phone">
+                            999-999-9999
+                        </p>
+                        <p class="store-web">
+                            <a href="#">#</a>
+                        </p>
+                        <p class="store-hours">
+                            Sometime - sometime
+                        </p>
+                    </div>
+                    <div class="store-collections">
+                        <h6>
+                            collections on display
+                        </h6>
+                        <div class="store-collections-list">
+                             
+                        </div>
+                    </div>
+                </div>
+                <image class="tail off" src="/store/pub/media/images/word-bubble-tail.png" />
+                <div class="address-search-div">
+                    <input id="address-search" type="text" class="address-search" placeholder="search zip or address" />
+                    <button id="address-search-button" class="action primary">Search</button>
+                </div>
+            </div>
+            <?php 
+            $catName =  $category->getName();
+            if(!empty($catName)):
+
+            $slug = strtolower(str_replace(" ", "-", $catName)); ?>
+            <div class="category-info">
+                <div class="category-about <?= strtolower($category->getName()) ?> synopsis" style="background-image: url('/store/pub/media/images/category-images/<?php echo $slug; ?>/icon.png');">
+                    <h1>
+                        <?php echo $catName; ?>
+                    </h1>
+                    <div class="category-headline"><?php echo  $category->getDescription(); ?></div>
+                    <div class="category-description">
+                        <?php echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId($slug . '_category_more_info')->toHtml();?>
+                        <br><br>
+                        <a href="/unique-material/#<?php echo $slug; ?>">Compare Other Materials &raquo;</a>
+                    </div>
+                    
+                    <span class="show-more">
+                        More on <?php echo $catName; ?>
+                    </span>
+                    
+                    <span class="hide-more">
+                        <i class="fa fa-angle-up"></i>
+                    </span>
+                </div>
+            </div>
+            <?php endif; ?>
+            <img src="/store/pub/media/images/accolades.png" class="accolades-banner" alt="Award Winning, Hand crafted, Made in the USA" />
+            <?php if(@$_GET['category_id']): ?>
+             <script type="text/javascript">
+                 document.querySelector(".category-info .show-more").addEventListener("click", function(){
+                     document.querySelector(".category-info .category-about").classList.remove("synopsis");
+                 });
+                 
+                 document.querySelector(".category-info .hide-more").addEventListener("click", function(){
+                     document.querySelector(".category-info .category-about").classList.add("synopsis");
+                 });
+            </script>
+            <?php endif; ?>
+            <script src="/wp-content/themes/rinzler/js/map.js"></script>
+            <script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script>
+            <script>
+                function __setMapControls(){
+                    var container = document.getElementById("storelocations-container");
+                    var closer =  container.querySelector(".closer");
+                    var showButton = document.getElementById("find-in-store-button");
+
+                    showButton.addEventListener("click", function(){
+                        container.classList.add("show");
+                    });
+
+                    closer.addEventListener("click", function(){
+                        container.classList.remove("show");
+                    });
+                }
+                __setMapControls();
+                
+            </script>
+        </div>
+    </div>
+<?php endif; ?>

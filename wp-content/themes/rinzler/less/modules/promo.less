@@ -1,0 +1,48 @@
+.promo {
+	padding: 0 0 130px;
+	.wrapper {
+		background-position: center;
+		background-size: cover;
+		height:522px;
+		margin-top:90px;
+		position: relative;
+		max-width: 1030px;
+		.overlay {
+			background: fade(@accent3, 80%);
+			padding:60px 300px 50px 100px;
+			position: absolute;
+			left:-80px;
+			top:155px;
+			color:#ffffff;
+			@media screen and (max-width: @tablet) {
+				padding:50px 100px;
+				width: 100%;
+			}
+			h2{
+				padding-bottom: 20px;
+				font-size: 2em;
+			}
+			p{
+				color: #ffffff;
+				padding-bottom: 20px;
+				line-height: 1.4em;
+				font-size: 1.2em;
+			}
+		}
+		img {
+		    position: absolute;
+		    right: -120px;
+		    top: -100px;
+		    @media screen and (max-width: @break) {
+		    	max-width:60%;
+		    }
+		    @media screen and (max-width: @tablet) {
+			    right: 0;
+			    height: 210px;
+			    margin: 0 auto;
+			    display: block;
+			    left: 0;
+		    }
+		}
+	}
+}

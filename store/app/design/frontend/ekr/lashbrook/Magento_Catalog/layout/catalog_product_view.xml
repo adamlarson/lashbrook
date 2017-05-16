@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <move element="product.info.sku" destination="page.main.title" before="-"/>
+        <move element="page.main.title" destination="product.info.main" before="-"/>
+        <!--move element="product.price.final" destination="product.info.addtocart" before="-"/>
+        <move element="product.info.addto" destination="addtocart" before="-"/-->
+        <referenceBlock name="product.info.stock.sku" remove="true" />
+        <referenceContainer name="content">
+	        <container name="product.ekr.custom-dropdowns" htmlTag="div" htmlClass="product-ekr-dropdowns" before="product.info.main" htmlId="product-ekr-dropdowns">
+	        	<block class="Magento\Catalog\Block\Product\AbstractProduct" name="block.ekr.custom-dropdowns" template="product/view/custom-dropdowns.phtml" before="-" />
+	    	</container>
+            <container name="product.erk.details" htmlTag="div" htmlClass="product-ekr-details" after="product.ekr.custom-dropdowns" htmlId="product-ekr-details">
+            </container>
+            <block class="Magento\Catalog\Block\Product\View" name="product.info.addtocart" as="addtocart" template="product/view/addtocart.phtml" cacheable="false"/>
+	    </referenceContainer>
+        <move element="product.info.main" destination="product.erk.details"  />
+        <move element="product.info.media" destination="product.erk.details" before="product.info.main" />
+
+    </body>
+</page>

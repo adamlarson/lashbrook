@@ -1,0 +1,43 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+@import 'module/_cart.less';
+@import 'module/_minicart.less';
+@import 'module/_checkout.less';
+
+.checkout-container{
+	header.modal-header{
+		background:transparent;
+		position: relative;
+		padding:0px;
+		 .action-close{
+		 	margin:0px;
+		}
+	}
+	.block-authentication .actions-toolbar{
+		> .primary,
+		> .secondary{
+			float:none;
+		}
+	}
+}
+
+.modal-popup .modal-header{
+	position: relative;
+	width: auto;
+}
+
+.cart-empty{
+    max-width: 690px;
+    width: 100%;
+    margin: 65px auto 65px;
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+
+    .cart-empty{
+        margin-top:150px;
+    }
+}

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="ekr_retailer_account_template" label="Request Retailer Account" file="retailer_account_email.html" type="html" module="Ekr_Customer" area="frontend"/>
+    <template id="ekr_retailer_account_approved" label="Retailer Account Approved" file="retailer_account_approved_email.html" type="html" module="Ekr_Customer" area="adminhtml"/>
+    <template id="ekr_retailer_account_denied" label="Retailer Account Denied" file="retailer_account_denied_email.html" type="html" module="Ekr_Customer" area="adminhtml"/>
+
+</config>

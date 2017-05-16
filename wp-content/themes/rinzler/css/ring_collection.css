@@ -1,0 +1,155 @@
+.ring-collection {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  min-height: 380px;
+  max-width: 1280px;
+  margin: 0 auto 140px;
+}
+
+.ring-collection .rings-holder{
+  position: absolute;
+  height:300px;
+  width: 1280px;
+}
+
+.ring-collection .ring-data {
+  position: absolute;
+  bottom: -10px;
+  box-sizing: border-box;
+  padding: 5px;
+  height: 3em;
+  width: 100%;
+  z-index: 10;
+  text-align: center;
+}
+.ring-collection .ring-data .ring-name {
+    display: block;
+    text-decoration: none;
+    color: #6d6e70;
+    font-size:22px;
+    font-family: "Univers LT W04_47 Light Cond", Helvetica, Arial, sans-serif;
+}
+.ring-collection .ring-data .ring-name img{
+  position: relative;
+}
+.ring-collection .ring-data .ring-link {
+  color: #dcc67d;
+  display: block;
+  margin-top:15px;
+  text-transform: lowercase;
+  font-size:18px;
+  font-family: "Univers LT W04_47 Light Cond", Helvetica, Arial, sans-serif;
+}
+.ring-collection .ring-data .ring-link i{
+  vertical-align: middle;
+}
+.ring-collection .left-arrow,
+.ring-collection .right-arrow {
+  position: absolute;
+  z-index: 6;
+  top: 0;
+  padding-top: 65px;
+  padding-bottom: 125px;
+  cursor: pointer;
+}
+.ring-collection .left-arrow i,
+.ring-collection .right-arrow i {
+  color: #3d627c;
+  font-size: 3.5em;
+  display: block;
+  text-align: center;
+}
+.ring-collection .left-arrow {
+  left: 15px;
+}
+.ring-collection .right-arrow {
+  right: 15px;
+}
+.ring-collection img {
+  position: absolute;
+}
+.ring-collection img.left-fader {
+  top: 0;
+  left: -1px;
+  z-index: 5;
+  pointer-events: none;
+}
+.ring-collection img.right-fader {
+  top: 0;
+  right: -1px;
+  z-index: 5;
+  -ms-transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
+  pointer-events: none;
+}
+
+@media screen and (max-width: 768px) {
+
+  .ring-collection img.left-fader{
+    left:-75px;
+  }
+  .ring-collection img.right-fader{
+    right:-75px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+
+  .ring-collection img.left-fader,
+  .ring-collection img.right-fader{
+    display: none;
+  }
+}
+
+.ring-collection img.ring {
+  top: 75px;
+  -webkit-transition: top 0.5s, left 0.5s, height 0.5s, opacity 0.5s;
+  transition: top 0.5s, left 0.5s, height 0.5s, opacity 0.5s;
+  z-index: 1;
+  left: 1500px;
+  opacity: 0;
+  height: 180px;
+  cursor: pointer;
+}
+.ring-collection img.ring.double-time {
+  -webkit-transition: top 0.25s, left 0.25s, height 0.25s, opacity 0.25s;
+  transition: top 0.25s, left 0.25s, height 0.25s, opacity 0.25s;
+  -webkit-transition-timing-function: linear;
+  transition-timing-function: linear;
+}
+.ring-collection img.ring.ring2,
+.ring-collection img.ring.ring4 {
+  top: 25px;
+  height: 200px;
+  opacity: 1;
+}
+.ring-collection img.ring.ring1,
+.ring-collection img.ring.ring5 {
+  top: 75px;
+  height: 150px;
+  opacity: 1;
+}
+.ring-collection img.ring.ring0 {
+  left: -200px;
+  opacity: 0;
+}
+.ring-collection img.ring.ring1 {
+  left: 0%;
+}
+.ring-collection img.ring.ring2 {
+  left: 16%;
+}
+.ring-collection img.ring.ring3 {
+  left: 38%;
+  height: 230px;
+  top: 0px;
+  opacity: 1;
+}
+.ring-collection img.ring.ring4 {
+  left: 64%;
+}
+.ring-collection img.ring.ring5 {
+  left: 85%;
+}

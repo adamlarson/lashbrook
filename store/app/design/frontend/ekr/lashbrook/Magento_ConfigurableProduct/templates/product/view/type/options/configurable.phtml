@@ -1,0 +1,190 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+
+<?php
+/** @var $block \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable*/
+$_product    = $block->getProduct();
+$_attributes = $block->decorateArray($block->getAllowAttributes());
+
+$helper = $this->helper('Ekr\Catalog\Helper\Data');
+
+// category
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+if(@$_GET['category_id']):
+    $_category = $objectManager->create('Magento\Catalog\Model\Category')->load($_GET['category_id']);
+endif;
+
+// get finish options for product.
+$finishes = json_decode($_product->getData('attributes_finishes_configurat'),true);
+// get images finishes
+$imagesFinishes = json_decode($_product->getData('ekr_images_finishes'),true);
+$finishesPrices = [];
+$resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
+$connection = $resource->getConnection();
+$tableName = $resource->getTableName("catalog_product_entity_decimal"); //gives table name with prefix
+
+foreach($finishes['options'] as $finish):
+    $sql = "Select value FROM " . $tableName . " WHERE `entity_id` = '". $finish['id'] ."' AND `attribute_id`='77'";
+    $result = $connection->fetchAll($sql);
+    $value = (@$result[0]['value'])? $result[0]['value'] : 0;
+
+    $finishesPrices[$finish['id']] = $value;
+endforeach;
+
+if ($_product->isSaleable() && count($_attributes)):?>
+    <div class="ekr-product-details">
+        <div class="product-name" id="ekr_product-sku" style="display:none;"><?php echo $_product->getName(); ?></div>
+        <?php /*if(isset($_category)): ?>
+            <div class="product-category"><?php
+                echo sprintf(__("Customizable %s Ring"), $_category->getName()); ?>
+            </div>
+        <?php endif;*/ ?>
+        <div class="product-description" id="ekr_product-description"></div>
+    </div>
+    <hr class="secondary" />
+    <h3 class="customize-callout"><?php echo __('CUSTOMIZE<br>YOUR RING'); ?></h3>
+    <?php foreach ($_attributes as $_attribute):
+    $attributeId = $_attribute->getAttributeId();
+    switch($attributeId):
+        case 137:
+            $attributeCode = "base_metal";
+        break;
+        case 139:
+            $attributeCode ="inlay";
+        break;
+        default:
+            $attributeCode = "";
+        break;
+    endswitch; ?>
+        <div class="field configurable required select overlay-select">
+            <label class="label" for="attribute<?php /* @escapeNotVerified */ echo $attributeId ?>">
+                <span><?php
+                    $label = $block->escapeHtml($_attribute->getProductAttribute()->getStoreLabel());
+                    if($label == "Inlay") $label = "Ring Inlay";
+                    echo str_replace(" ","<br>",$label);
+                    ?></span>
+            </label>
+            <div class="control">
+                <?php //if($attributeId == 137): ?>
+                    <div class="ekr_attribute-handler" data-code="<?php echo $_attribute->getAttributeCode(); ?>" data-id="<?php /* @escapeNotVerified */ echo $attributeId ?>"></div>
+                <?php //endif; ?>
+                <select name="super_attribute[<?php /* @escapeNotVerified */ echo $_attribute->getAttributeId() ?>]"
+                        data-validate="{required:true}"
+                        data-code="<?php echo $attributeCode; ?>"
+                        id="attribute<?php /* @escapeNotVerified */ echo $_attribute->getAttributeId() ?>"
+                        class="super-attribute-select">
+                    <option value=""><?php /* @escapeNotVerified */ echo __('Choose an Option...') ?></option>
+                </select>
+            </div>
+        </div>
+    <?php endforeach; ?>
+    <div style="clear:both"></div>
+    <!-- finish select -->
+    <div class="field configurable required select">
+        <label class="label" for="attributefinish"><?php echo __('Ring<br>Finish'); ?>:</label>
+        <div class="control">
+            <div class="ekr_attribute-handler" data-id="finish" data-code="finish"></div>
+            <select name="ekr_params[finish]"
+                data-validate="{required:true}"
+                data-code="finish"
+                id="attributefinish"
+                class="super-attribute-select">
+                    <option value=""><?php /* @escapeNotVerified */ echo __('Choose an Option...') ?></option>
+            </select>
+        </div>
+    </div>
+    <!-- size select -->
+    <input type="hidden" name="ekr_params[simple_product]" value="" id="ekr_simple_product" />
+    <div class="field configurable required select">
+        <label class="label" for="attributefinish"><?php echo __('Ring<br>Size'); ?>:</label>
+        <div class="control">
+            <select name="ekr_params[ring_size]"
+                data-validate="{required:true}"
+                data-code="ring_size"
+                id="attributering_size"
+                class="super-attribute-select">
+                    <option value=""><?php /* @escapeNotVerified */ echo __('Choose a Size...') ?></option>
+            </select>
+        </div>
+    </div>
+
+    <?php
+        $jsonConfig = json_decode($this->getJsonConfig());
+        $jsonConfig->attributes->finish = $finishes;
+        $jsonConfig->attributes->ring_size = (object) [
+            "id"=>"ring_size",
+            "code" => "ring_size",
+            "label" => "Ring Size",
+            "options" => (object) []
+        ];
+        $jsonConfig->finish_prices = $finishesPrices;
+
+        // get customer price multiplier
+        $multiplier = $helper->getCustomerPriceMultiplier();
+
+        $jsonConfig->price_multiplier = $multiplier;
+
+        $jsonConfig->prices->basePrice->amount = $jsonConfig->prices->basePrice->amount * $multiplier;
+        $jsonConfig->prices->finalPrice->amount = $jsonConfig->prices->finalPrice->amount * $multiplier;
+        $jsonConfig->prices->oldPrice->amount = $jsonConfig->prices->oldPrice->amount * $multiplier;
+
+        foreach($jsonConfig->optionPrices as $index => $values){
+            $jsonConfig->optionPrices->$index->basePrice->amount = $jsonConfig->optionPrices->$index->basePrice->amount * $multiplier;
+            $jsonConfig->optionPrices->$index->finalPrice->amount = $jsonConfig->optionPrices->$index->finalPrice->amount * $multiplier;
+            $jsonConfig->optionPrices->$index->oldPrice->amount = $jsonConfig->optionPrices->$index->oldPrice->amount * $multiplier;
+        }
+
+        // modify images
+        $tableName = $resource->getTableName("catalog_product_entity_varchar"); //gives table name with prefix
+
+        // print_r($jsonConfig->images );
+
+
+        foreach($jsonConfig->images as $product_id => $images):
+            $fimg = @$imagesFinishes[$product_id];
+            if($fimg):
+                foreach($images as $index => $image):
+                    $found = false;
+                    foreach($fimg as $fid => $fimages):
+                        foreach($fimages as $imagePath):
+                            if(strrpos($image->full,$imagePath) !== false):
+                                $image->finish = $fid;
+                                $jsonConfig->images->$product_id[$index] = $image;
+                                $found = true;
+                                break;
+                            endif;
+                        endforeach;
+                        if($found) break;
+                    endforeach;
+                endforeach;
+            endif;
+        endforeach;
+    ?>
+    <script type="text/x-magento-init">
+        {
+            "#product_addtocart_form": {
+                "configurable": {
+                    "spConfig": <?php /* @escapeNotVerified */ echo json_encode($jsonConfig); ?>
+                }
+            }
+        }
+    </script>
+    <div style="clear:both"></div>
+    <hr class="secondary" />
+<?php endif;?>
+<script>
+    function __fixTitleArea(){
+        var titleBox = document.querySelector("h1.page-title");
+        var skuBox = document.querySelector(".product.attibute.sku");
+        titleBox.parentNode.insertBefore(skuBox, titleBox);
+    }
+
+    __fixTitleArea();
+</script>

@@ -1,0 +1,84 @@
+.wysiwyg {
+  overflow: hidden;
+  position: relative;
+  &.two-col {
+    padding: 110px 0 100px;
+    h1, h2 {
+      text-align: center;
+    }
+    p {
+        //font-size: 1.2em;
+        font-size: 21px;
+      @media screen and (min-width:@handheld){
+        width: 50%;
+        float: left;
+        .box-sizing(border-box);
+        &:first-of-type {
+          padding-right: 20px;
+        }
+        &:last-of-type {
+          padding-left: 20px;
+        }
+      }
+    }
+  }
+  a {
+    color: @secondary-color;
+  }
+  h1,h2,h3,h4,h5,h6{
+    margin-bottom: 40px;
+  }
+  img{
+    max-width: 100%;
+    @media screen and (max-width:@grid) {
+      height:auto;
+    }
+  }
+  p, pre{
+    margin-bottom: 20px;
+  }
+  em{
+    font-weight: 400;
+  }
+  img + p {
+    margin-top: 20px;
+  }
+  ul,ol {
+    margin-bottom: 20px;
+  }
+  li{
+    margin-left: 25px;
+    line-height: 1.5em;
+    font-size: .95em;
+    font-weight: 400;
+    font-family: @display-font;
+    position: relative;
+  }
+  ul li {
+    list-style: none;
+    > ul {
+      > li {
+        margin-left: 20px;
+        &:before {
+          content: "\f10c";
+          font-size: .7em;
+        }
+      }
+    }
+  }
+  ol li {
+    list-style: decimal;
+  }
+  .alignright{
+    float: right;
+    padding-left: 20px;
+  }
+  .alignleft{
+    float: left;
+    padding-right: 20px;
+  }
+  .aligncenter{
+    display: block;
+    margin: 0 auto;
+  }
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
+    <block class="Ekr\Catalog\Block\CategoryCollection" name="content.categories" template="page/html/content_categories.phtml">
+       <label>Content Categories</label>
+    </block>
+</layout>
+<!--referenceContainer name="content">
+    <block class="Magento\Framework\View\Element\Template" name="html_home" as="html_home" template="Magento_Theme::html/home.phtml"/> 
+</referenceContainer-->

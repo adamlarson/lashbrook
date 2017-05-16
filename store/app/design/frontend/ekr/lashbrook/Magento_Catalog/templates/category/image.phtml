@@ -1,0 +1,79 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Category view template
+ *
+ * @var $block \Magento\Catalog\Block\Category\View
+ */
+?>
+
+
+<section class="category_wrapper">
+    <?php
+        $_helper    = $this->helper('Magento\Catalog\Helper\Output');
+        $_category  = $block->getCurrentCategory();
+        $categoryName = $_category->getName();
+        $category_slug = strtolower(str_replace(" ", "-", $categoryName));
+
+        $cat_image_url = "/store/pub/media/images/category-images/{$category_slug}/";
+
+        /*$_imgHtml   = '';
+        if ($_imgUrl = $_category->getImageUrl()) {
+            $_imgHtml = '
+                <div class="category-image">
+                    <img src="' . $_imgUrl . '" alt="' . $block->escapeHtml($_category->getName()) . '" title="' . $block->escapeHtml($_category->getName()) . '" class="image" />
+                </div>';
+            $_imgHtml = $_helper->categoryAttribute($_category, $_imgHtml, 'image');
+            echo $_imgHtml;
+        }*/
+    ?>
+    <?php 
+        $icon = $cat_image_url . "icon.png"; 
+        $bgr = $cat_image_url ."header.jpg" ; ?>
+    <div id="category_banner_content" style="background-image: url(<?php echo $bgr; ?>); ?>">
+        <div class="banner_content">
+            <div class="icon"><img src="<?php echo $icon; ?>" alt="" width="36px;" /></div>
+            <h1 class="headline"><?php /* @escapeNotVerified */ echo $categoryName; ?></h1>
+            <p class="subheadline"><?php echo $_category->getDescription(); ?></p>
+            <div class="description" style="display: none;">
+                <hr />
+                <div class="category_description"><?php echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId($category_slug . '_category_more_info')->toHtml();?></div>
+                <div style="clear:both;"></div>
+                <a class="button" href="/unique-material/#<?php echo $category_slug; ?>">Compare other Materials</a>
+            </div>
+            <a href="" class="dropdown_arrow" id="toggle-category-description">
+                <i class="fa fa-chevron-down"></i>
+                <i class="fa fa-chevron-up"></i>
+            </a>
+        </div>
+    </div>
+</section>
+<script>
+require([
+        'jquery',
+    ], function ($) {
+        $(function () { // to ensure that code evaluates on page load
+            $("#toggle-category-description").on('click',function(e){
+                e.preventDefault();
+                var $banner = $(this).closest(".banner_content");
+                if($banner.hasClass('maximized')){
+                    $banner.removeClass('maximized');
+                    $banner.find(".description").slideUp(1000);
+                }else{
+                    $banner.addClass('maximized');
+                    $banner.find(".description").slideDown(1000);
+                }
+            });
+        });
+    });
+</script>
+
+

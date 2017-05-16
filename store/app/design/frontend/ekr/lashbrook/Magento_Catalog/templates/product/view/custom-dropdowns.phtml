@@ -1,0 +1,49 @@
+<?php 
+// $block = Magento\Catalog\Block\Product\AbstractProduct;
+$_product = $block->getProduct();
+$productResource = $_product->getResource();
+$_baseMetal = $productResource->getAttribute('base_metal');
+$baseMetalId = $_baseMetal->getAttributeId();
+$_inlay = $productResource->getAttribute('inlay');
+$inlayId = $_inlay->getAttributeId();
+?>
+
+<!-- Base Metal dropdown -->
+<div class="ekr_overlay base-metals" id="choose_attribute<?php echo $baseMetalId; ?>" data-code="base_metal" data-attributeid="<?php echo $baseMetalId; ?>" style="display:none;">
+	<div class="overlay-close"></div>
+	<div class="attribute-title"><?php echo __("Base Metal"); ?></div>
+	<hr class="secondary"/>
+	<div class="attribute-values"></div>
+	<hr class="secondary"/>
+</div>
+<!-- Ring Finish dropdown -->
+<div class="ekr_overlay finish" id="choose_attributefinish" data-attributeid="finish" data-code="finish"  style="display:none;">
+	<div class="overlay-close"></div>
+	<div class="attribute-title"><?php echo __("Ring Finish"); ?></div>
+	<hr class="secondary"/>
+	<div class="attribute-values"></div>
+	<hr class="secondary"/>
+</div>
+<!-- Ring Inlay dropdown -->
+<div class="ekr_overlay inlay" id="choose_attribute<?php echo $inlayId; ?>" data-code="inlay"  data-attributeid="<?php echo $inlayId; ?>"   style="display:none;">
+	<div class="overlay-close"></div>
+	<div class="attribute-title"><?php echo $_inlay->getName(); ?></div>
+	<hr class="secondary" />
+	<div class="base-metals">
+		<div class="selected-base-metal" style="display:none;">
+			<div class="base-metal-name">Camo Display</div>
+			<div class="change-base-metal"><a href="#" id="link_change-base-metal"><?php echo __('Change Inlay'); ?></a></div>
+		</div>
+		<div class="attribute-values"></div>
+	</div>
+	<hr class="secondary"/>
+	<div class="inlay_category_options" style="display: none;">
+		<div class="inlay-list" id="ekr-inlays-list"></div>
+		<div class="inlay-image">
+			<div class="selected-image" id="ekr-inlay-preview">
+				
+			</div>
+			<a href="#" class="action accept" id="accept-inlay-value" data-value=""><?php echo __('Accept'); ?></a>
+		</div>
+	</div>
+</div>

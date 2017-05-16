@@ -1,0 +1,142 @@
+section.product {
+	padding-top: 120px;
+	margin-bottom: 72px;
+	overflow: hidden;
+	@media print {
+		padding-top: 0;
+	}
+	.product-images, 
+	.product-details {
+		width: 50%;
+		display: inline-block;
+		float: left;
+		@media screen and (max-width:@tablet) {
+			width: 100%
+		}
+	}
+	.product-images {
+		.main-img {
+			margin: 150px auto 54px;
+			display: block;
+		}
+		.gallery {
+			text-align: center;
+			display: block;
+			img {
+				border:1px solid @accent2;
+				margin: 0 10px;
+				&.active:after {
+					background-color: @accent2;
+					position:absolute;
+					width: 100%;
+					height:100%;
+					top:0;
+					left:0;
+				}
+			}
+		}
+	}
+	.product-details {
+		>div {
+			border-top:1px solid @accent2;
+			padding: 30px 0;
+			overflow: hidden;
+			&:first-of-type {
+				padding-top: 0;
+				border-top: none;
+			}
+		}
+		.product-info {
+			.finish {
+				padding-bottom: 10px;
+				color: @grey;
+				font-size: 2em;
+				@media print {
+					font-size: 1em;
+				}
+			}
+			h1 {
+				font-size: 4em;
+				color: @accent3;
+				padding-bottom: 15px;
+				@media print {
+					font-size: 1.5em;
+				}
+			}
+			p {
+				color: @grey;
+				font-size: 1.9em;
+				@media print {
+					font-size: 1em;
+				}
+			}
+		}
+		.product-customize {
+			h2{
+				color: @accent3;
+				font-size: 1.8em;
+				padding-bottom: 30px;
+			}
+			.product-custom-option {
+				width: 33%;
+				display: inline-block;
+				float: left;
+			}
+		}
+		.product-links {
+			>div {
+				display: inline-block;
+				float: left;
+			}
+			.product-pricing {
+				position: relative;
+				width: 66.66666%;
+				h2{
+					color: @grey;
+					padding-bottom: 30px;
+				}
+				p {
+					position: absolute;
+					right: 0;
+					top: 0;
+					color: @accent2;
+				}
+				button {
+					width: 174px;
+					font-size: .98em;
+					padding: 5px 8px;
+					margin-right: 10px;
+				}
+			}
+			.product-buttons {
+				width: 33.3333%;
+				@media print {
+					display: none;
+				}
+				i {
+					border:2px solid @accent1;
+					width: 38px;
+					height: 38px;
+					text-align: center;
+					padding-top: 7px;
+					.border-radius(50%);
+					/*-webkit-border-radius: 50%;
+					-moz-border-radius: 50%;
+					border-radius: 50%;*/
+					.box-sizing(border-box);
+					margin: 0 0 15px 15px;
+					&:before {
+						color:@accent1;
+						font-size: 1.2em;
+					}
+					&:hover {
+						background-color: @accent1;
+						&:before {
+							color: #ffffff;
+						}
+					}
+				}
+			}
+		}
+	}
+}

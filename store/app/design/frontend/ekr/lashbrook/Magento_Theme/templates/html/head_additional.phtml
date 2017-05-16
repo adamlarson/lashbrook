@@ -1,0 +1,51 @@
+<!--script type="text/javascript" src="/wp-content/themes/rinzler/js/jquery.hoverIntent.js"></script-->
+<script type="text/javascript">
+require(['jquery','jqueryhoverintent'], function($) {
+    //if you hover over main menu item with a child, assign class to magic menu
+    $("li.main-menu-item.menu-item-depth-0.menu-item-has-children").hoverIntent({ 
+        over: function() {
+            if( $('#magic_sub_menu').hasClass('disappear') || !$('#magic_sub_menu').hasClass('appear') ) {
+                $('#magic_sub_menu').addClass("appear");
+                $('li.main-menu-item.menu-item-depth-0.menu-item-has-children ul').css('z-index', '0');
+                var $me = $(this);
+                $me.addClass("appear");
+                $me.children('li.main-menu-item.menu-item-depth-0 > ul.sub-menu.menu-depth-1').addClass('appear');
+                $me.children('li.sub-menu-item').removeClass("disappear");
+                $me.children('li.sub-menu-item').addClass("appear");
+                $me.children('ul').css('z-index', '10');
+                console.log('appear');
+            }
+        },
+        out: function() {
+            $('#magic_sub_menu').removeClass('appear');
+            var $me = $(this);
+            $me.removeClass('appear');
+            $me.children('li.main-menu-item.menu-item-depth-0 > ul.sub-menu.menu-depth-1').removeClass('appear');
+            $me.children('li.sub-menu-item').addClass('appear');
+            $me.children('ul').css('z-index', '10');
+            console.log('disappear');
+        },
+        timeout: 175
+    });
+    $("li.main-menu-item.menu-item-depth-0.menu-item-has-children ul").hoverIntent({ 
+        over: function() {
+            
+        },
+        out: function() {
+
+        }
+    });
+
+    function checkMenu() {
+        if( 
+          !$('#magic_sub_menu').is(':hover') &&
+          !$('li.main-menu-item.menu-item-depth-0.menu-item-has-children').filter(function() { return $(this).is(':hover') }).length > 0
+        ) {
+            $('#magic_sub_menu').removeClass('appear');
+            $('#magic_sub_menu').addClass('disappear');
+            $('li.menu-item-has-children').removeClass('appear');
+            console.log('make background disappear');
+        }
+    }
+});
+</script>

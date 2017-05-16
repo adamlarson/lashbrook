@@ -1,0 +1,233 @@
+
+/************************************************************  Menu dropdown system  ***********/
+.u-block.expand {height:auto !important;}
+
+/* HIDE SUB-MENU STUFF ON MOBILE SCREENS */
+li.main-menu-item.menu-item-depth-0 ul.sub-menu.menu-depth-1 {
+    /* display: none; */
+    display: none;
+    opacity: 0;
+    width: 1050px;
+    min-height: 50px;
+    height: auto;
+    z-index: 9999;
+    position: absolute;
+    top: 59px;
+    padding-top: 10px;
+    left: 0;
+    transition: all 0.3s ease;
+
+}
+
+#magic_sub_menu {
+    height:0;
+    opacity:0;
+    pointer-events: none;
+    width: 100vw;
+    position: absolute;
+    top: 91px;
+    background: rgba(0, 48, 83, 0.8);
+    left: 0;
+    right: 0;
+    margin: auto;
+    z-index: 1;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+@media screen and (max-width:1150px) {
+    /* overlay */
+    /*header nav {*/
+        /*top:107px;*/
+    /*}*/
+    header.dark-header nav {
+        top:58px;
+    }
+
+    /* Submenu massaging on mobile */
+    li#nav-menu-item-27 ul.sub-menu.menu-odd.menu-depth-1 {
+        width: auto !important;
+        position: inherit !important;
+        margin-right: 0;
+        display: block;
+    }
+
+    li#nav-menu-item-27 ul.sub-menu.menu-odd.menu-depth-1 li {
+        margin-right: 0;
+    }
+
+    li#nav-menu-item-27 ul.sub-menu.menu-odd.menu-depth-1 li a {
+        font-size: 0.7em;
+    }
+}
+
+@media only screen and (min-width: 1024px) and (max-width: 1151px){
+    header nav li a {
+        color: #ffffff !important;
+    }
+}
+
+/* SHOW SUBMENU STUFF ON SCREENS 1200 AND UP */
+@media screen and (min-width:1151px){
+    #magic_sub_menu {min-height: 110px;}
+
+
+    li.main-menu-item.menu-item-depth-0 {
+        position:relative;
+        padding-bottom:38px;
+    }
+
+
+
+    li.main-menu-item.menu-item-depth-0.menu-item-has-children {
+        position: relative;
+
+    }
+
+    li#nav-menu-item-27.main-menu-item.menu-item-depth-0.menu-item-has-children {
+
+    }
+    li#nav-menu-item-27.main-menu-item.menu-item-depth-0.menu-item-has-children ul.sub-menu.menu-depth-1 {
+        margin-left: -436%;
+        max-width: 560px;
+        text-align: center;
+        height: 60px;
+    }
+    li#nav-menu-item-27.main-menu-item.menu-item-depth-0.menu-item-has-children ul.sub-menu.menu-depth-1 li.sub-menu-item {
+        padding-top:38px;
+    }
+    li.main-menu-item.menu-item-depth-0.menu-item-has-children:after {
+        /* display:none; */
+        opacity:0;
+        top: 58px;
+        left: 50%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-color: rgba(255, 255, 255, 0.9) transparent transparent transparent;
+        border-top-color: rgba(255, 255, 255, 0.9);
+        border-width: 20px;
+        margin-left: -20px;
+        z-index:2;
+        -webkit-transition: all .4s ease-in-out;
+        -moz-transition: all .4s ease-in-out;
+        -o-transition: all .4s ease-in-out;
+        transition: all .4s ease-in-out;
+    }
+    li.main-menu-item.menu-item-depth-0.menu-item-has-children:hover:after {
+        display:block;
+        opacity:1;
+    } 
+    .dark-header li.main-menu-item.menu-item-depth-0.menu-item-has-children:hover:after {
+        display: none;
+        top: 34%;
+        border-color: rgba(0, 48, 83, 0.9) transparent transparent transparent;
+        border-top-color: rgba(0, 48, 83, 0.9);
+    } 
+    li.main-menu-item.menu-item-depth-0:hover > ul.sub-menu.menu-depth-1 {
+        display:block;
+        //opacity:1;
+       // margin-left:-10px;
+    } 
+
+    li.main-menu-item.menu-item-depth-0 li.sub-menu-item {
+        margin-bottom: 0;
+    }
+    li.main-menu-item.menu-item-depth-0 li.sub-menu-item a {
+        color:#ffffff !important;
+    }
+    li.main-menu-item.menu-item-depth-0 li.sub-menu-item > a:hover {
+        color: #DCC67D !important;
+    }
+
+    header.dark-header #magic_sub_menu {
+        top:58px;
+    }
+    header.dark-header li.main-menu-item.menu-item-depth-0 ul.sub-menu.menu-depth-1 {
+        top:40px;
+    }
+    header.dark-header li.main-menu-item a {color:#FFF !important;}
+
+    .menu-item-depth-1 > a.menu-link,
+    .menu-item-depth-1 > ul.sub-menu {
+        display:inline-block;
+    }
+    .menu-item-depth-1 > a.menu-link {
+        font-size: 1.2em;
+        top: -13px;
+        position: relative;
+    }
+    .menu-item-depth-1 > ul.sub-menu {
+        max-width: 676px;
+        border-left: 1px solid #FFF;
+        padding-left: 20px;
+        margin-left: 20px;
+    }
+    .menu-item-depth-1 > ul.sub-menu li {
+        min-width: 100px;
+        text-align: center;
+        margin-right: 0;
+    }
+    .menu-item-depth-1 > ul.sub-menu li a {
+        /*font-size:1.3em;*/
+    }
+    .menu-item-has-children > a.menu-link {
+
+    }
+
+    /* This class is applied via Jquery to elements in the nav to make them appear */
+    .appear {
+        display:block !important;
+	opacity:1 !important;
+    }
+    /* This override of the appear class is so that the parent menu doesn't get broken */
+    .menu-item-has-children.appear {
+        display:inline-block !important;
+	opacity:1 !important;
+    }
+
+    .sub-menu-item.appear {
+	display:inline-block !important;
+    }
+
+    .disappear {
+    display: none;
+	opacity: 0;
+    pointer-events: none;
+    }
+
+    @keyframes fade_in {
+        0% {
+            display:block;
+            opacity:0;
+        }
+        1%  {
+            opacity:0.1;
+        }
+        100% {
+            opacity:1;
+        }
+    }
+
+   /* li.main-menu-item.menu-item-depth-0:hover > ul.sub-menu.menu-depth-1,
+    li.main-menu-item.menu-item-depth-0.menu-item-has-children:hover:after,
+    .dark-header li.main-menu-item.menu-item-depth-0.menu-item-has-children:hover:after
+     {
+        animation-name: fade_in;
+        animation-duration: 1s;
+    } */
+
+      li.main-menu-item.menu-item-depth-0.animate > ul.sub-menu.menu-depth-1,
+     li.main-menu-item.menu-item-depth-0.menu-item-has-children.animate,
+     .dark-header li.main-menu-item.menu-item-depth-0.menu-item-has-children.animate {
+	animation-name: fade_in;
+	animation-duration: 1s;
+     }
+
+    .cms-home li.main-menu-item.menu-item-depth-0.menu-item-has-children:after { top: 58px;}
+    .cms-home {}
+    .cms-home {}
+    .cms-home {}
+}

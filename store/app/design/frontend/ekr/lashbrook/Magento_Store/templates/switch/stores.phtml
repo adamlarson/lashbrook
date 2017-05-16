@@ -1,0 +1,22 @@
+<?php
+try{
+
+	echo shell_exec("php ".$_SERVER['DOCUMENT_ROOT']."/store/load_wordpress.php footer");
+}
+catch(Exception $e){
+	echo "caught it: ".$e->getMessage();
+}
+?>
+<link rel='stylesheet' id='owl-carousel-css'  href='/wp-content/themes/rinzler/css/owl.carousel.css?ver=4.0.4' type='text/css' media='all' />
+<script>
+	require(["jquery", "jquery/jquery-migrate"], function(){
+		require({
+			deps: ["owl.carousel"],
+			paths: {"owl.carousel": "/wp-content/themes/rinzler/js/owl.carousel"}
+		},
+			function(){
+			require({deps: ["script"],
+			paths: {"script": "/wp-content/themes/rinzler/js/script"}});
+		})
+	});
+</script>

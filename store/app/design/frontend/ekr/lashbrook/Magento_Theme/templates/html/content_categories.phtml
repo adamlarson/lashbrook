@@ -1,0 +1,50 @@
+<?php
+
+//until we can better find how to only show this section on the home page, this hack is in place
+
+
+$uri = $_SERVER['REQUEST_URI'];
+$uriParts = explode("/", $uri);
+
+if(empty($uriParts[count($uriParts) - 1])){
+	array_pop($uriParts);
+}
+
+if($uriParts[count($uriParts) - 1] == "store"): ?>
+
+	<div id="category-links">
+	<?php 
+		$categories = $block->getStoreCategories();
+		foreach ($categories as $category):
+		if(!$category->getIsActive()) continue;
+		$name = $category->getName();
+		$url = $category->getUrl();
+		$slug = strtolower(str_replace(" ", "-", $name));
+		$bgr_url = "/store/pub/media/images/category-images/{$slug}/link.jpg";
+	  ?>
+		<a href="<?php echo $url; ?>" class="category-link " style="background-image:url(<?php echo $bgr_url; ?>);">
+			<div class="overlay"></div>
+			<img class="icon" src="/store/pub/media/images/category-images/<?php echo $slug; ?>/icon.png" />
+			<img class="example" src="/store/pub/media/images/category-images/<?php echo $slug; ?>/demo-ring.png" />
+			<span><?php echo strtoupper($name); ?></span>
+		</a>
+	<?php endforeach; ?>
+
+	</div>
+
+	<!--a id="shop-all" class="action primary" style="margin-top:15px;" href="/store/">SHOP ALL RINGS</a-->
+
+	<!--img id="header-icons" class="icon" src="/store/pub/media/images/landing-icons.png" /-->
+
+	<!--script>
+		//category links is really NOT supposed to be in the footer, but here we are
+		//var categoryLinks = ;
+		var wrapper = document.querySelector("div.page-wrapper");
+		var maincontent = document.getElementById("maincontent");
+		wrapper.insertBefore(document.getElementById("category-links"), document.querySelector("footer"));
+		maincontent.querySelector(".column.main").appendChild(document.getElementById("shop-all"));
+		//maincontent.insertBefore(document.getElementById("header-icons"), maincontent.querySelector(".page-title-wrapper"));
+
+	</script-->
+
+<?php endif;  ?>

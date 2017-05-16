@@ -1,0 +1,26 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+   
+   <!-- logger handler --> 
+   <type name="Ekr\Cart\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <!-- logger -->
+    <type name="Ekr\Cart\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">EkrLogger</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="system" xsi:type="object">Ekr\Cart\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Model\Cart">
+        <plugin name="EkrCart" type="Ekr\Cart\Model\Cart" sortOrder="1" />
+    </type>
+    <!-- overwrite Abstract Item -->
+    <preference for="Magento\Quote\Model\Quote\Item\AbstractItem" type="Ekr\Cart\Model\AbstractItem" />
+
+    <!--preference for="Magento\Checkout\Block\Cart\Item\Renderer" type="Ekr\Cart\Block\Item\Renderer" /-->
+</config>

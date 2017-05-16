@@ -1,0 +1,40 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php $_product = $block->getProduct() ?>
+<?php if ($block->canEmailToFriend()): ?>
+	<div id="share-container" class="share-container">
+		<a href="https://www.facebook.com/sharer/sharer.php?u=<?= "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>" target="_blank"><i class="fa fa-facebook"></i></a>
+		<a href="https://twitter.com/home?status=<?= "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>" target="_blank"><i class="fa fa-twitter"></i></a>
+		<a href="https://pinterest.com/pin/create/button/?url=<?= "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>&media=<?=  $this->helper('Magento\Catalog\Helper\Product')->getImageUrl($_product) ?>&description=" target="_blank"><i class="fa fa-pinterest-p"></i></a>
+		<a href="https://plus.google.com/share?url=<?= "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>" target="_blank"><i class="fa fa-google-plus"></i></a>
+		<a href="javascript:window.print()" id="print-button" target="_blank"><i class="fa fa-print"></i></a>
+    	<a href="<?php /* @escapeNotVerified */ echo $this->helper('Magento\Catalog\Helper\Product')->getEmailToFriendUrl($_product) ?>"
+       		class="action mailto friend"><i class="fa fa-envelope"></i></a>
+   	</div>
+<?php endif; ?>
+<script>
+	function __adjustFormOptionsPlacement(){
+		var actionsContainer = document.createElement("div");
+		var shareContainter = document.getElementById("share-container");
+		var wishlistContainer = document.querySelector(".product-addto-links");
+		var priceContainer = document.querySelector(".price-box");
+		var buttonsContainer = document.querySelector(".box-tocart");
+		actionsContainer.classList.add("actions-container");
+
+		actionsContainer.appendChild(priceContainer);
+		actionsContainer.appendChild(wishlistContainer);
+		actionsContainer.appendChild(buttonsContainer);
+
+		document.querySelector(".product-options-bottom").appendChild(actionsContainer);
+	}
+
+	__adjustFormOptionsPlacement();
+
+</script>

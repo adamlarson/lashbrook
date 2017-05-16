@@ -1,0 +1,19 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+   <preference for="\Magento\Sales\Block\Order\View" type="Ekr\Sales\Block\Order\View" />
+   <preference for="\Magento\Sales\Block\Order\History" type="Ekr\Sales\Block\Order\History" />
+   <preference for="\Magento\Sales\Controller\AbstractController\OrderViewAuthorization" type="Ekr\Sales\Controller\AbstractController\OrderViewAuthorization" />
+   <type name="Ekr\Sales\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Ekr\Sales\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">EkrLogger</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="system" xsi:type="object">Ekr\Sales\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

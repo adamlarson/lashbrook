@@ -1,0 +1,41 @@
+.ring-slider {
+	padding: 50px 0;
+	text-align: center;
+	overflow: hidden;
+	@media screen and (max-width:@tablet) {
+		padding-bottom: 100px;
+	}
+	h2{
+		@media screen and (max-width:@tablet) {
+			padding-bottom: 50px;
+		}
+	}
+	.icon {
+		padding-bottom: 38px;
+	}
+	.ring-item {
+		width: 20%;
+    	float: left;
+    	@media screen and (max-width:@tablet) {
+    		width: 100%;
+			.scale(1);
+    	}
+     	img {
+    		max-width: 100%;
+    	}
+	}
+	.image_1,
+	.image_5 {
+		.scale(.5);
+		@media screen and (max-width:@tablet) {
+			.scale(1);
+    	}
+	}
+	.image_2,
+	.image_4 {
+		.scale(.75);
+		@media screen and (max-width:@tablet) {
+			.scale(1);
+    	}
+	}
+}

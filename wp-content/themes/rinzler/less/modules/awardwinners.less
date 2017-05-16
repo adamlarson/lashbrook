@@ -1,0 +1,59 @@
+.awardwinners {
+	padding:100px 0;
+	height: 530px;
+	@media screen and (max-width: @handheld) {
+		padding:75px 0 25px;
+	}
+	@media screen and (max-width: @mobile) {
+		padding:75px 0 0;	
+	}
+	.golden {
+		border:1px solid @accent2;
+		width:755px;
+		height:475px;
+		right:55px;
+		position: absolute;
+		text-align: center;
+		padding: 40px 20px;
+		.box-sizing(border-box);
+		@media screen and (max-width: @break) {
+			width: 100%;
+		}
+		@media screen and (max-width: @handheld) {
+			height:410px;
+		}
+		@media screen and (max-width: @mobile) {
+			//height:360px;
+		}
+		h3{
+			color: @accent3;
+			font-size: 2.5em;
+			padding-bottom: 20px;
+			line-height: 1.2em;
+		}
+		p{
+			font-size: 1.3em;
+			line-height: 1.4em;
+			color:@grey;
+		}
+		
+		.awards-icon{
+			margin: 0 0 15px;
+		}
+	}
+	img.rings {
+		z-index: 2;
+		position: absolute;
+		max-width:80%;
+		bottom: -230px;
+		@media screen and (max-width: @break) {
+			bottom: -170px;
+		}
+		@media screen and (max-width: @handheld) {
+			bottom:0;
+		}
+		@media screen and (max-width: @mobile) {
+			bottom:50px;	
+		}
+	}
+}

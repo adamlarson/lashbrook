@@ -1,0 +1,25 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+
+/**
+*  General template for displaying group of blocks devided into sections
+*/
+
+try{
+	echo shell_exec("php ".$_SERVER['DOCUMENT_ROOT']."/store/load_wordpress.php header");
+	//include_once("../wp-load.php");
+}
+catch(Exception $e){
+	echo "caught it: ".$e->getMessage();
+}
+
+//get_header("main");
+

@@ -1,0 +1,50 @@
+.owl-controls {
+	position: absolute;
+	z-index: 20;
+	bottom: 40px;
+	width: 100%;
+	text-align: center;
+	.owl-dots{
+		.owl-dot{
+			display: inline-block;
+  			zoom: 1;
+			span{
+				width: 18px;
+				height: 18px;
+				margin: 5px;
+				background: transparent;
+				border: 2px solid #fff;
+				border-radius: 18px;
+				display: block;
+				-webkit-backface-visibility: visible;
+				.transition(opacity 200ms ease);
+				.border-radius(30px);
+			}
+			
+			&.active span, &:hover span{
+				background: @primary-color;
+				border: 0;
+			}
+		}
+	}
+	i {
+		color: @accent1;
+	    font-size: 1.5em;
+	    display: block;
+	    text-align: center;
+	    margin-top: 8px;
+	}
+	.owl-next,
+	.owl-prev {
+		background-color: #ffffff;
+		width: 40px;
+		height: 40px;
+		position: absolute;
+	}
+	.owl-prev {
+		left: 0;
+	}
+	.owl-next {
+		right: 0;
+	}
+}

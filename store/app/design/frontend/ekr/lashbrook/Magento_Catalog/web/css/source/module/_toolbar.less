@@ -1,0 +1,355 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Common
+//  _____________________________________________
+
+@toolbar-mode-icon-font-size: 24px;
+@toolbar-element-background: @panel__background-color;
+
+& when (@media-common = true) {
+    
+    .pages{
+        .item{
+            &.current{
+                color:@secondary__color;
+            }
+
+        }
+    }
+    .page-products {
+        .columns {
+            position: relative;
+            z-index: 1;
+        }
+    }
+
+    .toolbar {
+        &:extend(.abs-add-clearfix all);
+        &-amount {
+            display: block;
+            line-height: @toolbar-mode-icon-font-size+2;
+            margin: 0;
+            padding: 8px 0 0;
+            vertical-align: middle;
+            .products.wrapper ~ .toolbar & {
+                display: none;
+            }
+        }
+        &-products {
+            margin-bottom: @indent__xl;
+            padding: 0 @indent__s;
+            text-align: center;
+            &:extend(.abs-add-clearfix all);
+            .pages {
+                display: none;
+                .products.wrapper ~ & {
+                    display: block;
+                }
+            }
+            .limiter {
+                display: none;
+                .control {
+                    display: inline-block;
+                }
+            }
+        }
+    }
+    
+    .filter-activation{
+        .products.wrapper ~ .toolbar & {
+            display: none;
+        }
+        float: left;
+        display: inline-block;
+        border: thin solid @secondary__color;
+        color: @secondary__color;
+        padding: 5px 8px;
+
+        &:visited{
+            color: @secondary__color;
+        }
+        &:hover{
+            background-color: @secondary__color;
+            color: white;
+            text-decoration: none;
+        }
+    }
+
+    .sorter {
+        padding: 0;
+        .products.wrapper ~ .toolbar & {
+            display: none;
+        }
+        /*&-options {
+            margin: 0 0 0 7px;
+            width: auto;
+            border-radius: 0;
+            border-color: @secondary__color;
+        }
+        &-action {
+            vertical-align: top;
+            .lib-icon-font(
+            @icon-arrow-up,
+            @_icon-font-size: 28px,
+            @_icon-font-line-height: 32px,
+            @_icon-font-color: @header-icons-color,
+            @_icon-font-color-hover: @header-icons-color-hover,
+            @_icon-font-text-hide: true
+            );
+            &.sort-desc:before {
+                content: @icon-arrow-down;
+            }
+        }*/
+        span{
+            display: block;
+            cursor: pointer;
+        }
+        
+        & .sort-title{
+            border: thin solid @secondary__color;
+            color: @secondary__color;
+            padding: 5px 8px;
+            &:hover, &.open{
+                background-color: @secondary__color;
+                color: white;
+            }
+        }
+    }
+    
+    .sorter-options{
+        border: 0px solid @secondary__color;
+        background-color: #FFF;
+        position: absolute;
+        top:55px;
+        right:0px;
+        color: @secondary__color;
+        overflow: hidden;
+        max-height: 0;
+        transition: max-height 0.5s, border-width 0.5s;
+        box-sizing: border-box;
+        width:175px;
+        z-index: 1000;
+        
+        &.open{
+            max-height: 315px;
+            border-width: 1px;
+        }
+
+        span{
+            display: block;
+            cursor: pointer;
+            padding:9px 18px;
+            font-size:22px;
+            text-transform: lowercase;
+            &:first-child{
+                padding-top: 20px;
+            }
+            &:last-child{
+                padding-bottom: 20px;
+            }
+            &:hover{
+                background-color: @secondary__color;
+                color: white;
+            }
+        }
+    }
+
+    .modes {
+        display: none;
+        float: right;
+    }
+
+    .limiter {
+        &-options {
+            width: auto;
+            margin: 0 5px 0 7px;
+        }
+        &-label {
+            font-weight: 400;
+        }
+        .page-products .toolbar & {
+            display: none;
+        }
+    }
+    
+    #filter{
+        background-color: rgba(0, 48, 83, 0.88);
+        position: absolute;
+        //padding: 20%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        box-sizing: border-box;
+        overflow: hidden;
+        display: none;
+        opacity: 0;
+        max-height: 600px;
+        .transitionFadeOut(0.5s);
+        color: white;
+        
+        .products.wrapper ~ & {
+            display: none;
+        }
+        
+        &.active {
+            display: block;
+            opacity: 1;
+            .transitionFadeIn(0.5s);
+        }
+        
+        .closer{
+            position: absolute;
+            font-size: 2em;
+            top: 10px;
+            right: 10px;
+            color: @secondary__color;
+            cursor: pointer;
+        }
+        
+        .filter-options{
+            width: 90%;
+            margin: 50px auto;
+            max-width: @layout__max-width;
+            .filter-option{
+                width: 33%;
+                padding: 0 2%;
+                float: left;
+                box-sizing: border-box;
+                h3{
+                    border-bottom: thin solid @secondary__color;
+                    text-align: left;
+                }
+                
+                ul{
+                    -webkit-column-count: 2;
+                    -moz-column-count: 2;
+                    column-count: 2;
+                    text-align: center;
+                    width: 80%;
+                    margin: 0 auto 100px auto;
+                    .lib-filter-options();
+                }
+            }
+        }
+        
+        .filter-controls{
+            clear: both;
+            button{
+                display: block;
+                margin: 25px auto;
+                background-color: @color-white;
+                color: color-gray42;
+                border: none;
+                padding: 10px 0;
+                width: 230px;
+                text-transform: uppercase;
+                cursor: pointer;
+                &:hover{
+                    background-color: @color-white-smoke;
+                }
+            }
+        }
+    }
+}
+
+//
+//    Mobile
+//--------------------------------------
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    
+    #filter{
+        display: none;
+    }
+    
+    .filter-activation{
+        display: none;
+    }
+    
+    .sorter{
+        display: none;
+    }
+}
+
+//
+//  Desctop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+    .page-products {
+        .columns {
+            padding-top: 0;
+            position: relative;
+            z-index: 1;
+        }
+    }
+
+    .toolbar {
+        .products.wrapper ~ & .pages {
+            float: left;
+        }
+        &-amount {
+            float: left;
+        }
+    }
+
+    .sorter {
+        float: right;
+        position: relative;
+    }
+
+    .modes {
+        display: inline-block;
+        float: right;
+        margin-right: 0;
+
+        .products.wrapper ~ .toolbar & {
+            display: none;
+        }
+
+        &-label {
+            &:extend(.abs-visually-hidden-desktop-s all);
+        }
+
+        &-mode {
+            .lib-css(color, @secondary__color);
+            float: left;
+            font-weight: @font-weight__regular;
+            line-height: 1;
+            padding: 9px 10px;
+            text-align: center;
+            &:not(.active):hover {
+                .lib-css(color, @color-gray40);
+                background: darken(@toolbar-element-background, 7%);
+            }
+            &.active {
+                .lib-css(color, @color-gray40);
+                &::before{
+                    .lib-css(color, @color-gray40);
+                }
+            }
+            .lib-icon-font(
+            @icon-grid,
+            @_icon-font-size: @toolbar-mode-icon-font-size,
+            @_icon-font-text-hide: true,
+            @_icon-font-color: @secondary__color,
+            @_icon-font-color-hover: @color-gray40
+            );
+        }
+    }
+
+    .mode-list {
+        .lib-icon-font-symbol(@icon-list);
+    }
+
+    .limiter {
+        float: right;
+        .products.wrapper ~ .toolbar & {
+            display: block;
+        }
+    }
+}

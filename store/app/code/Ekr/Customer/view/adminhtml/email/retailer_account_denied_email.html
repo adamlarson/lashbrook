@@ -1,0 +1,7 @@
+{{template config_path="design/email/header_template"}}
+
+<p>{{trans "Dear %username," username=$data.username }}</p>
+
+<p>{{trans "Your account request for a retailer account has been denied. If you have any questions please visit <a href='%store_url'>The Lashbrook Store</a> and contact customer service." store_url=$data.store_url |raw }}</p>
+
+{{template config_path="design/email/footer_template"}}

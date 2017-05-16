@@ -1,0 +1,69 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Category view template
+ *
+ * @var $block \Magento\Catalog\Block\Category\View
+ */
+?>
+<?php /*if ($_description = $block->getCurrentCategory()->getDescription()): ?>
+    <div class="category-description">
+        <?php echo $this->helper('Magento\Catalog\Helper\Output')->categoryAttribute($block->getCurrentCategory(), $_description, 'description') ?>
+    </div>
+    <a id="compare-other" class="action primary" style="margin-top:15px;" href="/store/">Compare Other Materials</a>
+<script>
+
+    var urlKey = "<?php echo $block->getCurrentCategory()->getURLKey(); ?>";
+    var iconImage = new Image();
+    var mainContent = document.getElementById("maincontent");
+    var topContent = document.createElement("div");
+    var bgImage = mainContent.querySelector(".category-image img");
+    var description = mainContent.querySelector(".category-view");
+    var preview = document.createElement("div");
+    var clicker = document.createElement("span");
+    var descriptionShowing = false;
+    
+    preview.classList.add("category-preview");
+    topContent.id = "topcontent";
+    iconImage.classList.add("icon-image");
+    clicker.classList.add("click-reveal");
+    clicker.innerHTML = "<i class=\"fa fa-chevron-down\"></i>";
+    
+    document.querySelector(".page-wrapper").insertBefore(topContent, mainContent);
+    iconImage.src = "/store/pub/media/images/mini-icon-"+ urlKey +".svg";
+    topContent.style.background = "linear-gradient( rgba(0,48,83, 0.75), rgba(0,48,83,0.75) ), url('"+bgImage.src+"')";
+    topContent.style["background-repeat"] = "no-repeat";
+    topContent.style["background-size"] = "cover";
+    mainContent.querySelector(".category-image").remove();
+    topContent.appendChild(iconImage);
+    topContent.appendChild(mainContent.querySelector(".page-title-wrapper"));
+    topContent.appendChild(mainContent.querySelector(".page.messages"));
+    
+    preview.appendChild(description.querySelector(".category-description > *"));
+    topContent.appendChild(preview);
+    description.insertBefore(document.createElement("hr"), description.firstChild);
+    description.appendChild(document.getElementById("compare-other"));
+    topContent.appendChild(description);
+    topContent.appendChild(clicker);
+    
+    clicker.addEventListener("click", function(){
+        descriptionShowing = !descriptionShowing;
+        if(descriptionShowing){
+            description.classList.add("show");
+            clicker.classList.add("show");
+        }else{
+            description.classList.remove("show");
+            clicker.classList.remove("show");
+        }
+    });
+    
+</script>
+<?php endif; */ ?>

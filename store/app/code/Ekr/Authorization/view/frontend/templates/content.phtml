@@ -1,0 +1,58 @@
+<?php 
+$orders = $this->getOrders();
+
+?>
+
+<h1>Pending Orders</h1>
+<?php if($orders->getTotalCount() > 0){
+?>
+<table id="held-orders">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Name</th>
+			<th>Created</th>
+			<th>Address</th>
+			<th>Phone</th>
+			<th> </th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php while($order = $orders->fetchItem()){ 
+		$address = $order->getShippingAddress();
+		if(empty($address)){
+			$address = $order->getBillingAddress();
+		}
+		?>
+		<tr>
+			<td><?= $order->getId() ?></td>
+			<td><?= $address->getName() ?></td>
+			<td><?= $order->getCreatedAt() ?></td>
+			<td><?= implode(' ', $address->getStreet())." {$address->getCity()}, {$address->getRegion()} {$address->getPostcode()}" ?></td>
+			<td><?= $address->getTelephone() ?></td>
+			<td><a href="/store/sales/order/view/order_id/<?= $order->getId() ?>/" target="_blank">View</a>
+				<a href="/store/order_authorization/pending/process/order_id/<?= $order->getId() ?>/">Finalize</a>
+				<!--a href="/store/order_authorization/pending/drop/order_id/<?= $order->getId() ?>/">Drop</a-->
+			</td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/ju/dt-1.10.11/datatables.min.css"/>
+<script>
+require.config({
+	paths: {
+		"dataTable": "https://cdn.datatables.net/t/ju/dt-1.10.11/datatables.min" 
+	}
+});
+require([
+    "jquery",
+    "jquery/ui",
+    "dataTable"
+], function($){
+	$('#held-orders').dataTable();
+});
+</script>
+<?php } else { ?>
+	<p>No outstanding orders available</p>
+<?php } ?>
