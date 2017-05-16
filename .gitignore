@@ -5,7 +5,7 @@ wp-config.php
 searchreplacedb2.php
 /replace
 .DS_Store
-
+/store/app/etc/env.php
 
 /store/.buildpath
 /store/.cache
