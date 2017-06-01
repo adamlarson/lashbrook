@@ -13,13 +13,16 @@
  *
  * @var $block \Magento\Catalog\Block\Category\View
  */
-?>
 
+$classics_id = 5;
+?>
 
 <section class="category_wrapper">
     <?php
         $_helper    = $this->helper('Magento\Catalog\Helper\Output');
         $_category  = $block->getCurrentCategory();
+        $category_id = $_category->getId();
+        $is_classics = ($category_id  == $classics_id);
         $categoryName = $_category->getName();
         $category_slug = strtolower(str_replace(" ", "-", $categoryName));
 
@@ -38,21 +41,42 @@
     <?php 
         $icon = $cat_image_url . "icon.png"; 
         $bgr = $cat_image_url ."header.jpg" ; ?>
-    <div id="category_banner_content" style="background-image: url(<?php echo $bgr; ?>); ?>">
+    <div id="category_banner_content" class="category-banner-content" style="background-image: url(<?php echo $bgr; ?>);">
         <div class="banner_content">
-            <div class="icon"><img src="<?php echo $icon; ?>" alt="" width="36px;" /></div>
-            <h1 class="headline"><?php /* @escapeNotVerified */ echo $categoryName; ?></h1>
-            <p class="subheadline"><?php echo $_category->getDescription(); ?></p>
-            <div class="description" style="display: none;">
-                <hr />
-                <div class="category_description"><?php echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId($category_slug . '_category_more_info')->toHtml();?></div>
-                <div style="clear:both;"></div>
-                <a class="button" href="/unique-material/#<?php echo $category_slug; ?>">Compare other Materials</a>
-            </div>
-            <a href="" class="dropdown_arrow" id="toggle-category-description">
-                <i class="fa fa-chevron-down"></i>
-                <i class="fa fa-chevron-up"></i>
-            </a>
+                <div class="icon">
+                    <?php if(!$is_classics): ?>
+                        <img src="<?php echo $icon; ?>" alt="" width="36px;" />
+                    <?php endif; ?>
+                </div>
+            <?php if(!$is_classics):
+                    $headlineText = $categoryName;
+                    $headlineClass = "";
+                else:
+                    $headlineClass = "classics";
+                    $headlineText = "My Style<br><span>By Lashbrook</span>";
+                endif; ?>
+            <h1 class="headline <?php echo $headlineClass; ?>"><?php echo $headlineText; ?></h1>
+            <?php if($is_classics): ?>
+                <div class="classics-rings"><img src="/store/pub/media/images/my_style_rings.png"></div>
+            <?php endif; ?>
+            <p class="subheadline"><?php 
+                if(!$is_classics): 
+                    echo $_category->getDescription();
+                else:
+                    echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('my_style_banner_copy')->toHtml();
+                endif; ?></p>
+            <?php if(!$is_classics): ?> 
+                <div class="description" style="display: none;">
+                    <hr />
+                    <div class="category_description"><?php echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId($category_slug . '_category_more_info')->toHtml();?></div>
+                    <div style="clear:both;"></div>
+                    <a class="button" href="/unique-material/#<?php echo $category_slug; ?>">Compare other Materials</a>
+                </div>       
+                <a href="" class="dropdown_arrow" id="toggle-category-description">
+                    <i class="fa fa-chevron-down"></i>
+                    <i class="fa fa-chevron-up"></i>
+                </a>
+            <?php endif; ?>
         </div>
     </div>
 </section>

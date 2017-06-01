@@ -1,0 +1,26 @@
+<?php
+/**
+ * Category view template
+ *
+ * @var $block \Magento\Catalog\Block\Category\View
+ */
+
+$classics_id = 5;
+$_category  = $block->getCurrentCategory();
+if($_category->getId() != $classics_id):
+?>
+<div class="category-view bottom-banner">
+	<section class="category_wrapper">
+	    <div class="category-banner-content" style="background-image: url(/store/pub/media/images/category-images/classics/header.jpg);">
+	    	<div class="banner_content">
+	    		<h1 class="headline">Looking for<br>the classics?</h1>
+	    		<p class="subheadline"><?php echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('classics_reference_banner_copy')->toHtml(); ?></p>
+	    		<div class="classics-rings"><img src="/store/pub/media/images/my_style_rings.png"></div>
+	    		<div class="description">
+	                    <a class="button" href="/store/classics/">See Ring Profiles</a>
+	                </div> 
+	        </div>
+	    </div>
+	</section>
+</div>
+<?php endif; ?>

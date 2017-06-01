@@ -55,10 +55,19 @@
     }
     .item-options {
         dt {
-            margin: 0;
+            margin: 0 10px 0 0;
+            float:left;
+            &::after{
+                content:'';
+                clear:both;
+            }
         }
         dd {
             margin: 0 0 15px;
+            &::after{
+                content:'';
+                clear:both;
+            }
         }
         &.links {
             dt {

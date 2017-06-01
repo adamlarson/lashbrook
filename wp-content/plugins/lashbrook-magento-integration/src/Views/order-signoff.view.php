@@ -15,7 +15,8 @@
 		<div class="col-md-6 order-info">
 			<p>Order Status: <?php echo ucfirst($order->status); ?><br>
 			Order Number: #<?php echo str_pad($order->entity_id, 8, '0', STR_PAD_LEFT); ?><br>
-			Order Total: $<?php echo number_format($order->grand_total,2); ?></p>
+			Order Total: $<?php echo number_format($order->grand_total,2); ?><br>
+			PO Number: <?php echo $order->payment->po_number; ?></p>
 		</div>
 	</div>
 	<hr />

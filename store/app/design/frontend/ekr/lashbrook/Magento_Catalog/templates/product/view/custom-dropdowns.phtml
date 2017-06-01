@@ -47,3 +47,79 @@ $inlayId = $_inlay->getAttributeId();
 		</div>
 	</div>
 </div>
+<!-- ring engraving selection -->
+<?php 
+	$fonts = ['Arial','Lucida Calligraphy','Lucia BT','French Script','Times New Roman','Vladimir Script','Tempus Sans','Old London','Kells SD'];
+	$selectedFont = (@$_GET['engraving_font'])? $_GET['engraving_font'] : "Arial";
+	$font_slug = strtolower(str_replace(" ","-", $selectedFont));
+	$selectedClass = (in_array($selectedFont,$fonts))? $font_slug : "arial";  ?>
+<div class="ekr_overlay ring-engraving" id="choose_attributeengraving" data-code="engraving" data-attributeid="engraving" style="display:none;">
+	<input type="hidden" id="engraving-selected-font" value="Arial"/>
+	<input type="hidden" id="engraving-selected-location" value="inside"/>
+	<input type="hidden" id="engraving-selected-text" value=""/>
+	<div class="overlay-close"></div>
+	<div class="attribute-title"><?php echo __("Engraving"); ?></div>
+	<hr class="secondary"/>
+	<div class="ekr-scrollable-container" id="engraving-container">
+		<div class="font-options">
+			<div class="selected-font" id="selected-font">
+				<div class="font-name <?php $selectedClass; ?>"><?php echo $selectedFont; ?></div>
+				<div class="change-font"><a href="#" id="link_change-font"><?php echo __('Change Font'); ?></a></div>
+			</div>
+			<div class="attribute-values" id="font-options-container" style="display:none;">
+				<div class="section-title">Font Choices</div>
+				<ul id="font-options">
+					<?php foreach($fonts as $font):
+						$font_slug = strtolower(str_replace(" ","-", $font));
+						$selected = ($selectedFont == $font)? "selected" : ""; ?>
+						<li class="font-option <?php echo $selected; ?> <?php echo $font_slug; ?>" data-font="<?php echo $font; ?>" data-class="<?php echo $font_slug; ?>"><span></span><?php echo $font; ?></li>
+					<?php endforeach; ?>
+				</ul>
+				<div class="clearfix"></div>
+				<?php $selected = (in_array($selectedFont, $fonts))? "" : "selected"; ?>
+				<div class="custom-font <?php echo $selected; ?>" id="custom-font-container">
+					<span><i></i>Custom:</span>
+					<input type="text" name="custom-font" id="custom-font-value" class="arial" value="<?php if($selected) echo $selectedFont; ?>" />
+					<span class="next-button"><a href="#" class="select-custom-font">next &raquo;</a></span>
+				</div>
+			</div>
+		</div>
+		<hr class="secondary"/>
+		<div class="engraving-options" id="ekr-engraving-options">
+			<!-- location -->
+			<div class="engraving-location">
+				<div class="section-title">Text Location</div>
+				<div class="options">
+					<?php 
+						$selectedLocation = (@$_GET['engraving_location'])? $_GET['engraving_location'] : "inside";
+						$selected = ($selectedLocation == "inside")? "selected": ""; ?>
+					<div class="loc-option <?php echo $selected; ?>" id="loc-inside" data-location="inside">
+						Inside<br>
+						<span class="price" id="engraving-inside-price">$15</span>
+					</div>
+					<?php $selected = ($selectedLocation == "outside")? "selected": ""; ?>
+					<div class="loc-option <?php echo $selected; ?>" id="loc-outside" data-location="outside">
+						Outside<br>
+						<span class="price" id="engraving-outside-price">$30</span>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+			<hr class="secondary"/>
+			<div class="engraving-text">
+				<div class="section-title">Engraving</div>
+				<div class="engraving-field">
+					<?php $engravingText = (@$_GET['engraving_text'])? $_GET['engraving_text'] : ""; ?>
+					<input type="text" name="engraving-text" placeholder="(none)" id="engraving-textfield" value="<?php echo $engravingText; ?>" />
+					<div class="characters-left" id="engraving-characters-left">35 characters left</div>
+					<div class='fit-disclaimer' id="fit-disclaimer">Engraving not fitting? Call Lashbrook and we can help.</div>
+				</div>
+			</div>
+			<hr class="secondary"/>
+			<div class="action-buttons">
+				<a href="#" class="action none" id="reject-engraving-options" data-value=""><?php echo __('Remove'); ?></a>
+				<a href="#" class="action accept" id="accept-engraving-options" data-value=""><?php echo __('Accept'); ?></a>
+			</div>
+		</div>
+	</div>
+</div>

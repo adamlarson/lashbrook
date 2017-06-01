@@ -96,7 +96,7 @@
 					$eauth = SalesOrderEauthToken::where(["eauth_token"=>$this->order_token])->first();
 					//print_debug($eauth);
 					if($eauth != null){
-						$order = SalesOrder::where(["entity_id" => $eauth->sales_order_id])->with('addresses','items','token')->first();
+						$order = SalesOrder::where(["entity_id" => $eauth->sales_order_id])->with('addresses','items','token','payment')->first();
 						if(@$order->token->signature_image_data){
 							$signature_display = "";
 							$signature_source = $order->token->signature_image_data;

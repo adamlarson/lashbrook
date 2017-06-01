@@ -37,11 +37,13 @@
             <a href="/store/checkout/cart/"><i class="fa fa-shopping-bag"></i></a>
             <!-- magento search form -->
             <div class="header-search">
-                <form id="search_mini_form" action="/store/catalogsearch/advanced/result/" method="get">
+                <form id="search_mini_form" action="/store/catalogsearch/result/" method="get">
+                <!--form id="search_mini_form" action="/store/catalogsearch/advanced/result/" method="get"-->
                     <button type="submit" title="Search"><i class="fa fa-search"></i></button>
                     <div class="field search">
                         <div class="control">
-                            <input id="search" name="sku" value="" placeholder="Search entire store here..." class="input-text" maxlength="128" role="combobox" aria-haspopup="false" aria-autocomplete="both" autocomplete="off" type="text">
+                            <input id="search" name="q" value="" placeholder="Search entire store here..." class="input-text" maxlength="128" role="combobox" aria-haspopup="false" aria-autocomplete="both" autocomplete="off" type="text">
+                            <!--input id="search" name="sku" value="" placeholder="Search entire store here..." class="input-text" maxlength="128" role="combobox" aria-haspopup="false" aria-autocomplete="both" autocomplete="off" type="text"-->
                             <div id="search_autocomplete" class="search-autocomplete"></div>
                         </div>
                     </div>

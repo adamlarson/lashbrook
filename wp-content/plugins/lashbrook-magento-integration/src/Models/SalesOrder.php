@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Lashbrook\Models\SalesOrderAddress;
 use Lashbrook\Models\SalesOrderItem;
 use Lashbrook\Models\SalesOrderEauthToken;
+use Lashbrook\Models\SalesOrderPayment;
 
 class SalesOrder extends Model {
 
@@ -43,6 +44,10 @@ class SalesOrder extends Model {
 
     public function items(){
         return $this->hasMany(SalesOrderItem::class,'order_id');
+    }
+    
+    public function payment(){
+        return $this->hasOne(SalesOrderPayment::class,'parent_id');
     }
 
     public function token(){

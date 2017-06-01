@@ -14,7 +14,6 @@ $_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
 $category = $_objectManager->create('Magento\Catalog\Model\Category')->load(@$_GET['category_id']);
 
 //$category = $objectManager->get('Magento\Framework\Registry')->registry('current_category');//get current category
-
 if ($detailedInfoGroup = $block->getGroupChildNames('detailed_info', 'getChildHtml')):?>
     <div class="product info detailed">
         <?php $layout = $block->getLayout(); ?>

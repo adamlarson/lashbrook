@@ -38,7 +38,7 @@ if(is_plugin_active("lashbrook-magento-integration/lashbrook-magento-integration
 	$lashbrook_capsole->addConnection([
 		'driver' => 'mysql',
 		'host' => DB_HOST,
-		'database' => 'magento',
+		'database' => 'magento2',
 		'username' => DB_USER,
 		'password' => DB_PASSWORD,
 		'charset' => $charset,

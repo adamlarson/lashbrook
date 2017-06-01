@@ -46,6 +46,8 @@ class View extends \Magento\Catalog\Controller\Product
      */
     protected $_logger;
 
+    protected $_dataHelper;
+
      protected $finish_attribute_id = 145;
     protected $price_attribute_id = 77;
 
@@ -65,6 +67,7 @@ class View extends \Magento\Catalog\Controller\Product
         \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Ekr\Catalog\Helper\Data $dataHelper,
         \Ekr\Catalog\Logger\Logger $logger
     ) {
         $this->viewHelper = $viewHelper;
@@ -74,6 +77,7 @@ class View extends \Magento\Catalog\Controller\Product
         $this->_productFactory = $productFactory;
         $this->_catalogProductTypeConfigurable = $catalogProductTypeConfigurable;
         $this->_result =  $context->getResultFactory();
+        $this->_dataHelper = $dataHelper;
 
         $this->_logger->info('construct View');
 
@@ -178,43 +182,7 @@ class View extends \Magento\Catalog\Controller\Product
      */
     public function getProductUrl($simple, $additional = [])
     {
-        $this->_logger->info("getting product url");
-        $this->_logger->info("get parent id for " . $simple->getEntityId());
-        // check if product is has a parent
-        $parentByChild = $this->_catalogProductTypeConfigurable->getParentIdsByChild($simple->getEntityId());
-        $parent_id = null;
-        $this->_logger->info("parentByChild: " . $parentByChild[0]);
-        if(isset($parentByChild[0])){
-            $parent_id = $parentByChild[0];          
-        }
-        $this->_logger->info("parent_id: " . $parent_id);
-        // if product has a parent
-        if($parent_id){
-            $configurable = $this->loadProduct($parent_id);
-            $this->_logger->info("got configurable: " . $parent_id );
-            $url = $this->getDefaultUrl($configurable,$additional); 
-            $this->_logger->info("default url" . $url);
-            // get attribute values
-            $base_metal = $simple->getData('base_metal');
-            $inlay = $simple->getData('inlay');
-            $finish = $this->getProductAttribute($simple->getEntityId(),$this->finish_attribute_id);
-
-            $this->_logger->info("base_metal" . $base_metal);
-            $this->_logger->info("inlay" . $inlay);
-            $this->_logger->info("finish" . $finish);
-
-            $url .= (strpos($url,"?") === false)? "?" : "&";
-            $url .= "base_metal={$base_metal}";
-            if(!empty($inlay)) $url .= "&inlay={$inlay}";
-            if(!empty($finish)) $url .= "&finish={$finish}";
-
-            $this->_logger->info("final url" . $url);
-        }else{
-            $url = $this->getDefaultUrl($simple,$additional);
-        }
-
-        $this->product_urls[$simple->getEntityId()] = $url;
-        return $url;
+        return $this->_dataHelper->getProductUrl($simple,$additional);
     }
 
     /**
@@ -224,50 +192,5 @@ class View extends \Magento\Catalog\Controller\Product
      */
     public function loadProduct($product_id){
         return $this->_productFactory->create()->load($product_id);
-    }
-
-    /**
-     * get product base url
-     * @param  object $product \Magento\Catalog\Model\Product
-     * @return string
-     */
-    public function getDefaultUrl($product,$additional){
-        $url = "/store/catalog/product/view/id/" . $product->getEntityId() . "/";
-        if(@$additional['category_id']){
-            $url .= "?category_id=" . $additional['category_id'];
-        }
-        return $url;
-    }
-
-    /**
-     * get attribute directly from table.
-     * @param  int $entity_id    product id
-     * @param  int $attribute_id attribute id
-     * @return return value
-     */
-    function getProductAttribute($entity_id,$attribute_id,$table = "catalog_product_entity_varchar"){
-
-        if(isset($this->product_attribute_values[$attribute_id][$entity_id])) return $this->product_attribute_values[$attribute_id][$entity_id];
-
-        $this->_logger->info("getting " . $attribute_id);
-        // get database connection
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance(); // Instance of object manager
-        // $this->_logger->info("got objectManager");
-        $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
-        // $this->_logger->info("got resource");
-        $connection = $resource->getConnection();
-        // $this->_logger->info("got connection");
-        $tableName = $resource->getTableName($table); //gives table name with prefix
-        $this->_logger->info("got tablename {$tableName}");
-        // $this->_logger->info("got order id {$order_id}");
-        $sql = "Select value FROM " . $tableName . " WHERE `entity_id` = '{$entity_id}' AND `attribute_id`='{$attribute_id}'";
-        // $this->_logger->info("query: {$sql}");
-        $result = $connection->fetchAll($sql);
-        // $this->_logger->info("results " . print_r($result));
-        $value = (@$result[0]['value'])? $result[0]['value'] : "";
-        
-        $this->product_attribute_values[$attribute_id][$entity_id] = $value;
-
-         return $value;
     }
 }

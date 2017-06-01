@@ -32,7 +32,7 @@ define([
             mediaGalleryInitial: "/store/pub/media/images/no-photo.png",
             onlyMainImg: false,
             sizeOptions:{},
-            erkOverlays: null,
+            ekrOverlays: null,
             urlVars: null,
             inlayMapping:[
                 {
@@ -217,12 +217,15 @@ define([
             var base_metal = this._ekrGetParameterByName('base_metal');
             var inlay = this._ekrGetParameterByName('inlay');
             var finish = this._ekrGetParameterByName('finish');
+            var weight = this._ekrGetParameterByName('weight');
+            var ring_size = this._ekrGetParameterByName('ring_size');
 
             this.options.urlVars = {
                 base_metal: (base_metal == null)? "" :   base_metal,
                 inlay: (inlay == null)? "" :   inlay,
                 finish: (finish == null)? "" :   finish,
-                ring_size: (finish == null)? "" :  '10.00'
+                ring_size: (ring_size == null)? '10.00' :  ring_size,
+                weight: (weight == null)? "" :  weight,
             };
 
             // Initial setting of various option values
@@ -244,12 +247,16 @@ define([
             this._configureForValues();
 
             // set up dropdown overlays.
-            this._erkConfigureAttributeOverlays();
+            this._ekrConfigureAttributeOverlays();
 
-            // initial
-            //this.options.setup_complete = true;
-            //this._ekrAssignPreselectedValue(document.getElementById('attribute137'));
+            // initialize mm ring width select
+            this._ekrConfigureRingWidthSelect();
 
+            console.log(this.options.spConfig);
+
+            if(this.options.spConfig.call_for_pricing == "always"){
+                this._ekrCallForPricing(true);
+            }
         },
 
         /**
@@ -415,6 +422,7 @@ define([
             if(this.attributeId == "ring_size"){
                 event.data._reloadPrice();
                 event.data._changeProductImage();
+                event.data._ekrCheckCallForPricing();
             }else{
                 event.data._configureElement(this);
             }
@@ -460,9 +468,8 @@ define([
             var images = [],
                 initialImages = $.extend(true, [], this.options.mediaGalleryInitial),
                 galleryObject = $(this.options.mediaGallerySelector).data('gallery');
-
+            
             if (this.options.spConfig.images[this.simpleProduct]) {
-
                 var possible = $.extend(true, [], this.options.spConfig.images[this.simpleProduct]);
                 var element = document.getElementById('attributefinish');
                 var finish = element.options[element.selectedIndex].value;
@@ -477,7 +484,6 @@ define([
                     images = possible;
                 }
             }
-
             function updateGallery(imagesArr) {
                 var imgToUpdate,
                     mainImg;
@@ -492,9 +498,10 @@ define([
             }
 
             if (galleryObject) {
-                $(".ekr-image-disclaimer").each().remove();
+                $(".ekr-image-disclaimer").each(function(){
+                    $(this).remove();
+                });
                 var disclaimer = document.getElementById("ekr-image-disclaimer-hidden");
-                console.log(images);
                 if (images.length) {
                     images.map(function (img) {
                         img.type = 'image';
@@ -505,7 +512,9 @@ define([
                     } else {
                         galleryObject.updateData(images)
                     }
-                    $(".ekr-image-disclaimer").each().remove();
+                    $(".ekr-image-disclaimer").each(function(){
+                        $(this).remove();
+                    });
                     //disclaimer.setAttribute('style',"display:none;");
                 } else {
                     // show blank image
@@ -631,6 +640,22 @@ define([
 
                 }
             }
+            // ring weight and only one available option
+            if(attributeId == 158){
+                var label = element.options[1].config.label;
+                var $me = $("#attribute158");
+                if(element.options.length == 2){
+                    //$me.val(element.options[1].config.id).trigger('change');
+                    $me.closest('.field.configurable').hide();
+                    var widget = this;
+                    setTimeout(function(){
+                        widget._ekrAttributeSelected(attributeId,element.options[1].config.id);
+                    },300);
+                }else{
+                    $me.closest('.field.configurable').show();
+                }
+            }
+            
         },
 
         /**
@@ -731,6 +756,27 @@ define([
                 }
                 prices[element.attributeId] = priceValue;
             }, this);
+            // check engraving prices
+            var locPrice = 0;
+            if($("#attributeengraving").val() == "1"){
+                var location = $("#ekr_params-engraving-location").val();
+                
+                if(location == "inside"){
+                    if($("#attribute137").val() == "11"){ // Zirconium
+                        locPrice = widget.options.spConfig.engraving.outside_pricing;
+                    }else{
+                        locPrice = widget.options.spConfig.engraving.inside_pricing;
+                    }
+                }else{
+                    locPrice = widget.options.spConfig.engraving.outside_pricing;
+                }
+            }
+            prices.engraving = {
+                finalPrice: {
+                    adjustments:{},
+                    amount: locPrice
+                }
+            }
 
             // check price for ring size
             if(prices.ring_size.hasOwnProperty('finalPrice')){
@@ -767,17 +813,38 @@ define([
          * set up custom overlays
          * @return {[type]} [description]
          */
-        _erkConfigureAttributeOverlays:function(){
+        _ekrConfigureAttributeOverlays:function(){
             var widget = this;
             // click drowndown handlers.
             $(".ekr_attribute-handler").on('click',function(){
                 var $me = $(this);
                 var attribute_id = $me.data('id');
-                var code = $me.data('code');
                 if($("#attribute" + attribute_id).prop('disabled') == true) return;
-                var options = (parseFloat(attribute_id) == 139)? widget._ekrFilterInlayOptions() : null;
-                widget._ekrAddOptionsToOverlay(attribute_id,options);
+                var code = $me.data('code');
                 var $overlay = $("#choose_attribute" + attribute_id);
+                switch(code){
+                    case "engraving":
+                        // any custom data needed for engraving overlay.
+                        if(document.getElementById("attribute139") != null){
+                            // rings with an inlay can't have outside engraving.
+                            $overlay.find("#loc-outside").hide();
+                        }
+                        // set pricing
+                        var outPrice = widget.options.spConfig.engraving.outside_pricing;
+                        var inPrice = widget.options.spConfig.engraving.inside_pricing;
+                        if($("#attribute137").val() == "11"){ // Zirconium
+                            inPrice = outPrice;
+                        }
+                        $overlay.find("#loc-inside .price").html("$" + inPrice);
+                        $overlay.find("#loc-outside .inside").html("$" + outPrice);
+                        
+                    break;
+                    default:
+                        var options = (parseFloat(attribute_id) == 139)? widget._ekrFilterInlayOptions() : null;
+                        widget._ekrAddOptionsToOverlay(attribute_id,options);
+                    break;
+                }
+
                 switch($overlay.data('code')){
                     case "inlay":
                         $overlay.find(".inlay_category_options,.selected-base-metal").hide();
@@ -800,7 +867,7 @@ define([
                         widget._ekrInlayMetalChanged($me,$overlay);
                     break;
                     default:
-                        widget._erkAttributeSelected($overlay.data("attributeid"),$me.data('value'));
+                        widget._ekrAttributeSelected($overlay.data("attributeid"),$me.data('value'));
                         $overlay.hide().parent().hide();
                     break;
                 }
@@ -814,20 +881,208 @@ define([
                 widget._changeInlayMetal($(this));
             }).on('click','.accept',function(e){
                 var $me = $(this);
-                e.preventDefault();
-                widget._erkAttributeSelected(139,$me.attr('data-value'));
+                if($me.attr('id') == "accept-engraving-options"){
+                    widget._ekrAcceptEngraving();
+                }else{
+                    e.preventDefault();
+                    widget._ekrAttributeSelected(139,$me.attr('data-value'));
+                }
                 var $overlay = $me.closest(".ekr_overlay");
+                $overlay.hide().parent().hide();
+            }).on('click','.font-option',function(e){
+                e.preventDefault();
+                widget._ekrToggleFontOption($(this));
+            }).on('click','#link_change-font',function(e){
+                e.preventDefault();
+                widget._ekrChangeFontOption($(this));
+            }).on('click','.loc-option',function(){
+                widget._ekrToggleEngravingLocation($(this));
+            }).on('click','.select-custom-font',function(e){
+                e.preventDefault();
+                widget._ekrSelectEngravingCustomFont($(this));
+            }).on('click','#reject-engraving-options',function(e){
+                e.preventDefault();
+                widget._ekrRejectEngraving();
+                var $overlay = $(this).closest(".ekr_overlay");
                 $overlay.hide().parent().hide();
             });
             widget._ekrBuildInlayOptions($("#choose_attribute139"));
             var $dp = $("#product-ekr-dropdowns");
             $dp.hide();
-            widget.options.erkOverlays = $dp.children();
+            widget.options.ekrOverlays = $dp.children();
             // window resize
             $(window).resize(function() {
                 widget._ekrResizeOverlayContainers();
-
             });
+            // custom font text field
+            $("#custom-font-value").on('keyup',function(){
+                widget._ekrCheckCustomFontLength($(this));
+            }).on('focus',function(){
+                widget._ekrCustomFontFocus($(this));
+            });
+            // engraving text field
+            $("#engraving-textfield").on('keyup',function(event){
+                var $me = $(this);
+                var value = $me.val();
+                var length = value.length;
+                if(value.length >= 35){
+                    length = 35;
+                    value = value.substring(0,35);
+                    $me.val(value);
+                    $("#fit-disclaimer").addClass('show');
+                }else{
+                    $("#fit-disclaimer").removeClass('show');
+                }
+                $("#engraving-selected-text").val(value);
+                var left = 35 - length;
+                $("#engraving-characters-left").html(left + " characters left");
+                if(length > 0){
+                    $("#reject-engraving-options,#accept-engraving-options").addClass('show');
+                }else{
+                    $("#reject-engraving-options,#accept-engraving-options").removeClass('show');
+                }
+            }).on('focus',function(){
+                widget._ekrOverlayFieldFocus();
+            }).on('blur',function(){
+                widget._ekrOverlayFieldBlur();
+            });
+        },
+        _ekrAcceptEngraving:function(){
+            var location = $("#engraving-selected-location").val();
+            var text = $("#engraving-selected-text").val();
+            $("#ekr_params-engraving-font").val($("#engraving-selected-font").val());
+            $("#ekr_params-engraving-location").val(location);
+            $("#ekr_params-engraving-text").val(text);
+            // options.
+            $("#attributeengraving").html('<option value="0">None</option><option value="1">' + text + '</option>').val('1');
+            // set price for engraving.
+            this._reloadPrice();
+        },
+        _ekrRejectEngraving:function(){
+            // reset values
+            $("#ekr_params-engraving-font").val("");
+            $("#ekr_params-engraving-location").val("");
+            $("#ekr_params-engraving-text").val("");
+            // options.
+            $("#attributeengraving").html('<option value="0">None</option>').val('0');
+            // set price for engraving.
+            this._reloadPrice();
+        },
+        /**
+         * user wants to provide the name of a custom font
+         * @param  object $input jquery object for input field 
+         * @return void
+         */
+        _ekrCustomFontFocus:function($input){
+            $("#font-options li.selected").removeClass("selected");
+            $input.parent().addClass("selected");
+            this._ekrCheckCustomFontLength($input);
+            
+        },
+        _ekrOverlayFieldFocus:function(){
+            // make over lay scrollable.
+            var winHeight = $(window).height() - 100;
+            var $overlay = $("#engraving-container");
+            $overlay.css('height',winHeight + "px");
+            $overlay.addClass('overlay-scrollable');
+        },
+        _ekrOverlayFieldBlur:function(){
+            var $overlay = $("#choose_attributeengraving");
+            $overlay.css('height','auto');
+            $overlay.removeClass('overlay-scrollable');
+        },
+        /**
+         * check length of custom font option
+         * hide or show next button based on length
+         * @param  object $input jquery object for input field 
+         * @return void
+         */
+        _ekrCheckCustomFontLength:function($input){
+            if($input.val().length > 0){
+                $input.next().addClass('show');
+            }else{
+                $input.next().addClass('hide');
+            }
+        },
+        /**
+         * user typed custom font and now selected it.
+         * @param  object $link jquery element clicked.
+         * @return void
+         */
+        _ekrSelectEngravingCustomFont:function($link){
+            var $overlay = $link.closest('.ekr_overlay');
+            var $selected = $overlay.find("#selected-font");
+            var value = $("#custom-font-value").val();
+            $selected.find('.font-name').html("Custom: " + value).attr('font-name');
+            $("#engraving-textfield").attr('class',"");
+            var $container = $("#font-options-container");
+            // set hidden field.
+            $("#engraving-selected-font").val(value);
+
+            if($container.is(":visible")){
+                $container.slideUp(500,function(){
+                    $selected.slideDown(500,function(){
+                        $("#ekr-engraving-options").slideDown(500);
+                    });
+                });
+            }
+        },
+        /**
+         * user clicked on an engraving font option
+         * @param  object $option jquery object for li element clicked
+         * @return void
+         */
+        _ekrToggleFontOption:function($option){
+            var $ul = $option.parent();
+            if($option.hasClass('selected')) return;
+            $("#custom-font-container").removeClass('selected').find('input').val('').next().removeClass('show');
+            var $prev = $ul.find('.selected');
+            if($prev.length) $prev.removeClass('selected');
+            $option.addClass('selected');
+            var $overlay = $ul.closest('.ekr_overlay');
+            var $selected = $overlay.find("#selected-font");
+            var font_class = $option.data('class');
+            $selected.find('.font-name').html($option.data('font')).attr('class',"font-name " + font_class);
+            $("#engraving-textfield").attr('class',font_class);
+            // set hidden field.
+            $("#engraving-selected-font").val($option.data('font'));
+
+            var $container = $("#font-options-container");
+            if($container.is(":visible")){
+                $container.slideUp(500,function(){
+                    $selected.slideDown(500,function(){
+                        $("#ekr-engraving-options").slideDown(500);
+                    });
+                });
+            }
+        },
+        /**
+         * user wants to change the previously selected font
+         * @param  object $link jquery element for link clicked.
+         * @return void
+         */
+        _ekrChangeFontOption:function($link){
+            var $overlay = $link.closest(".ekr_overlay");
+            $overlay.find('#ekr-engraving-options').slideUp(500,function(){
+                $overlay.find('.selected-font').slideUp(500,function(){
+                    $(this).next().slideDown(500);
+                });
+            });
+        },
+        /**
+         * user wants to change the engraving location
+         * @param  object $loc jquery element clicked
+         * @return void
+         */
+        _ekrToggleEngravingLocation:function($loc){
+            if($loc.hasClass('selected')) return;
+            if($loc.data('location') == "inside"){
+                $("#engraving-selected-location").val("inside");
+                $loc.addClass('selected').next().removeClass('selected');
+            }else{
+                $("#engraving-selected-location").val("outside");
+                $loc.addClass('selected').prev().removeClass('selected');
+            }
         },
         /**
          * check what options are available in the inlay select
@@ -883,7 +1138,7 @@ define([
             var winWidth = $(window).width();
             if(winWidth > 836){
                 $("#ekr-inlays-list").css('height',"");
-                this.options.erkOverlays.each(function(){
+                this.options.ekrOverlays.each(function(){
                     $(this).find(".attribute-values").css('height',"");
                 });
                 return;
@@ -892,7 +1147,7 @@ define([
             }
             var winHeight = $(window).height();
             var height = winHeight - 149;
-            this.options.erkOverlays.each(function(){
+            this.options.ekrOverlays.each(function(){
                 $(this).find(".attribute-values").css('height',height + "px");
             });
             height = winHeight - inlayListPadding;
@@ -958,7 +1213,7 @@ define([
             }
             // if only one option
             if(count == 1){
-                widget._erkAttributeSelected($overlay.data("attributeid"),last);
+                widget._ekrAttributeSelected($overlay.data("attributeid"),last);
                 $overlay.hide().parent().hide();
                 return;
             }
@@ -1061,8 +1316,11 @@ define([
          * @param  int value_id     attribute value id
          * @return void
          */
-        _erkAttributeSelected: function(attribute_id,value_id){
-            $("#attribute" + attribute_id).val(value_id).trigger("change");
+        _ekrAttributeSelected: function(attribute_id,value_id){
+            var $select = $("#attribute" + attribute_id);
+            if($select.find('option[value="' + value_id + '"]')){
+                $("#attribute" + attribute_id).val(value_id).trigger("change");
+            }
         },
 
         /**
@@ -1152,7 +1410,6 @@ define([
             return decodeURIComponent(results[2].replace(/\+/g, " "));
         },
         _ekrAssignPreselectedValue(element){
-            console.log(element);
             //if(!this.options.setup_complete) return;
             var code = element.getAttribute('data-code');
             var urlVars = this.options.urlVars;
@@ -1165,12 +1422,12 @@ define([
                     var value = $select.find('option[ring_size="' + passed + '"]').attr('value');
                     $select.val(value).trigger('change');
                 }else{
-                    this._erkAttributeSelected(attribute_id,passed);
+                    this._ekrAttributeSelected(attribute_id,passed);
                 }
             }
             this._ekrTriggerChanges();
         },
-        _erkGetProductSimpleInfo:function(){
+        _ekrGetProductSimpleInfo:function(){
             var widget = this;
             $.ajax({
                 url: this.options.ekr_product_ajax_url,
@@ -1190,7 +1447,6 @@ define([
             });
         },
         _ekrTriggerChanges:function(){
-            console.log("triggering changes");
             var empty = true;
             var index;
             for(var i in this.options.urlVars){
@@ -1200,11 +1456,141 @@ define([
                     break;
                 }
             }
-            if(!empty) console.log("no empty yet " + this.options.urlVars[index]);
             if(!empty) return;
             this._changeProductImage();
-            this._erkGetProductSimpleInfo();
+            this._ekrGetProductSimpleInfo();
             setTimeout(function(){$(".price").show(); },1000);
+        },
+        _ekrConfigureRingWidthSelect:function(){
+            var widget = this;
+            var $select = $("#attributemm_width_from_range");
+            if($select.length > 0){
+                $select.on('change',function(){
+                    widget._ekrCheckCallForPricing();
+                });
+            }
+            $select = $("#attributemm_reference_product");
+            if($select.length > 0){
+                $select.on('change',function(){
+                    var sProduct = parseFloat($select.val());
+                    var cProduct = parseFloat(widget.options.spConfig.configurable_product_id);
+                    if(sProduct != cProduct){
+                        // redirect to reference product.
+                        $select.prop('disabled',true);
+                        widget._ekrRedirectToReferenceProduct(sProduct);
+                    }
+                });
+            }
+        },
+        /**
+         * check if a user need to call for pricing based on selected attributes
+         * @return void
+         */
+        _ekrCheckCallForPricing:function(){
+            var widget = this;
+            var callForPricing = false;
+            // check if call_for_pricing flag is set.
+            switch(widget.options.spConfig.call_for_pricing){
+                case "always":
+                    callForPricing = true;
+                break;
+                case "on_size":
+                    var $ringSize = $("#attributering_size");
+                    var ring_size = $ringSize.find('option[value="' + $ringSize.val() + '"]').text();
+                    console.log($ringSize);
+                    console.log($ringSize.find('option[value="' + $ringSize.val() + '"]'));
+                    console.log(ring_size);
+                    callForPricing = (ring_size != "10.00");
+                break;
+            }
+
+            if(!callForPricing){
+                var $select = $("#attributemm_width_from_range");
+                // check if ring with is based in a range
+                // and if it doesn't match the default mm width
+                if($select.length > 0){
+                    var $select = $("#attributemm_width_from_range");
+                    var selectedMM = parseFloat($select.val());
+                    var defaultMM = parseFloat(this.options.spConfig.default_mm_width);
+                    callForPricing = (selectedMM != defaultMM);
+                }
+            }
+            this._ekrCallForPricing(callForPricing);
+        },
+        _ekrCallForPricing:function(call_for_pricing){
+            if(call_for_pricing){
+                $(".price-final_price,#product-addtocart-button").hide();
+                $("#ekr-call-for-pricing").show();
+            }else{
+                $(".price-final_price,#product-addtocart-button").show();
+                $("#ekr-call-for-pricing").hide();
+            }
+        },
+        _ekrRedirectToReferenceProduct:function(product_id){
+            /*
+            /store/catalog/product/view/id/59/?category_id=5&base_metal=19&finish=18&weight=291&label=7DMIL+Styles
+            */
+            var stringUrl = "/store/catalog/product/view/id/" + product_id + "?";
+            var category_id = this._ekrGetParameterByName('category_id');
+            var label = this._ekrGetParameterByName('label');
+            var $ringSizeSelect = $('#attributering_size');
+            var ring_size = "10.00";
+            if($ringSizeSelect.val().length > 0){
+                ring_size = $ringSizeSelect.find('option[value="'+ $ringSizeSelect.val() + '"]').attr('ring_size');
+            }
+
+            var variables = [
+                {
+                    name:'category_id',
+                    value:(category_id == null)? "" : category_id
+                },
+                {
+                    name:'label',
+                    value:(label == null)? "" : label
+                },
+                {
+                    name:'base_metal',
+                    value:$("#attribute137").val()
+                },
+                {
+                    name:'inlay',
+                    value:$("#attribute139").val()
+                },
+                {
+                    name:'weight',
+                    value:$("#attribute158").val()
+                },
+                {
+                    name:'finish',
+                    value:$("#attributefinish").val()
+                },
+                {
+                    name:'ring_size',
+                    value:encodeURIComponent(ring_size)
+                },
+                {
+                    name:'engraving_text',
+                    value:$("#ekr_params-engraving-text").val()
+                },
+                {
+                    name:'engraving_font',
+                    value:$("#ekr_params-engraving-font").val()
+                },
+                {
+                    name:'engraving_location',
+                    value:$("#ekr_params-engraving-location").val()
+                },           
+            ];
+            variables.forEach(function(e){
+                console.log("name" + e.name);
+                console.log(typeof e.name);
+                if( typeof e.value !== 'undefined' ) {
+                    if(e.value.length > 0)
+                        stringUrl += e.name + "=" + e.value + "&";
+                }
+            });
+            stringUrl = stringUrl.slice(0, -1);
+            window.location.href=stringUrl;
         }
     });
 
