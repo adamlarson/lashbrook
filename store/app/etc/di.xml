@@ -101,7 +101,7 @@
     <preference for="Magento\Framework\DB\LoggerInterface" type="Magento\Framework\DB\Logger\File"/>
     <type name="Magento\Framework\DB\Logger\File">
         <arguments>
-            <argument name="logAllQueries" xsi:type="boolean">true</argument>
+            <argument name="logAllQueries" xsi:type="boolean">false</argument>
             <argument name="debugFile" xsi:type="string">debug/lashbrook.log</argument>
         </arguments>
     </type>
