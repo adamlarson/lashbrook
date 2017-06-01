@@ -92,5 +92,10 @@
             </arguments>
             <block class="Magento\Catalog\Block\Category\Rss\Link" name="rss.link" template="Magento_Catalog::category/rss.phtml"/>
         </referenceBlock>
+        <referenceContainer name="page.wrapper">
+            <container name="category.classics-bottom-banner" htmlTag="div" htmlClass="classics-bottom-banner" after="main.content" htmlId="classics-bottom-banner">
+                        <block class="Magento\Catalog\Block\Category\View" name="block.ekr.custom-dropdowns" template="Magento_Catalog::category/classics-bottom-banner.phtml" before="-" />
+            </container>
+        </referenceContainer>
     </body>
 </page>

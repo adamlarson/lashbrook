@@ -71,5 +71,19 @@ if (strpos($_SERVER['PHP_SELF'], '/store/') !== false){
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
 </script>
+<!-- BEGIN PHP Live! HTML Code -->
+<span style="color: #0000FF; text-decoration: underline; cursor: pointer;position: fixed; bottom: -3px; right: 0; z-index: 100000;" id="phplive_btn_1496173713" onclick="phplive_launch_chat_0(0)"></span>
+<script type="text/javascript">
+
+(function() {
+var phplive_e_1496173713 = document.createElement("script") ;
+phplive_e_1496173713.type = "text/javascript" ;
+phplive_e_1496173713.async = true ;
+phplive_e_1496173713.src = "https://t2.phplivesupport.com/lashbrook/js/phplive_v2.js.php?v=0|1496173713|2|" ;
+document.getElementById("phplive_btn_1496173713").appendChild( phplive_e_1496173713 ) ;
+})() ;
+
+</script>
+<!-- END PHP Live! HTML Code -->
 </body>
 </html>

@@ -49,7 +49,14 @@ if ($_product->isSaleable() && count($_attributes)):?>
         <div class="product-description" id="ekr_product-description"></div>
     </div>
     <hr class="secondary" />
-    <h3 class="customize-callout"><?php echo __('CUSTOMIZE<br>YOUR RING'); ?></h3>
+    <h3 class="customize-callout">
+    <?php //print_r($_GET); ?>
+    <?php if(@$_GET['label']):
+            echo __($_GET['label']);
+        else:
+            echo __('CUSTOMIZE<br>YOUR RING');
+        endif;
+    ?></h3>
     <?php foreach ($_attributes as $_attribute):
     $attributeId = $_attribute->getAttributeId();
     switch($attributeId):
@@ -58,6 +65,9 @@ if ($_product->isSaleable() && count($_attributes)):?>
         break;
         case 139:
             $attributeCode ="inlay";
+        break;
+        case 158:
+            $attributeCode ="weight";
         break;
         default:
             $attributeCode = "";
@@ -72,9 +82,9 @@ if ($_product->isSaleable() && count($_attributes)):?>
                     ?></span>
             </label>
             <div class="control">
-                <?php //if($attributeId == 137): ?>
+                <?php if($attributeId != 158): ?>
                     <div class="ekr_attribute-handler" data-code="<?php echo $_attribute->getAttributeCode(); ?>" data-id="<?php /* @escapeNotVerified */ echo $attributeId ?>"></div>
-                <?php //endif; ?>
+                <?php endif; ?>
                 <select name="super_attribute[<?php /* @escapeNotVerified */ echo $_attribute->getAttributeId() ?>]"
                         data-validate="{required:true}"
                         data-code="<?php echo $attributeCode; ?>"
@@ -114,9 +124,84 @@ if ($_product->isSaleable() && count($_attributes)):?>
             </select>
         </div>
     </div>
-
+    <?php
+    $ekr_product_width_range = $_product->getData('ekr_product_width_range');
+    $default_width = $_product->getData('ekr_default_mm_width');
+    if(!empty($ekr_product_width_range)):
+        $mm_range = explode('-',$ekr_product_width_range);
+        $start = $mm_range[0];
+        $end = $mm_range[1]; ?>
+        <!-- mm width range -->
+        <div class="field configurable select">
+            <label class="label" for="attributemm_width_from_range"><?php echo __('Ring<br>Width'); ?>:</label>
+            <div class="control">
+                <select name="ekr_params[mm_width_from_range]"
+                    data-code="mm_width_from_range"
+                    id="attributemm_width_from_range" >
+                    <?php for($cwidth = $start; $cwidth <= $end; $cwidth++):
+                            $selected = ($cwidth == $default_width)? "selected" : ""; ?>
+                            <option value="<?php echo $cwidth; ?>" <?php echo $selected; ?>><?php echo $cwidth . "mm"; ?></option>
+                    <?php endfor; ?>
+                </select>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    <?php endif;
+    $ekr_width_reference_products = $_product->getData('ekr_width_reference_products');
+    if(!empty($ekr_width_reference_products)):
+        $referenceProducts = json_decode($ekr_width_reference_products); ?>
+        <!-- reference products mm width -->
+        <div class="field configurable select">
+            <label class="label" for="attributemm_reference_product"><?php echo __('Ring<br>Width'); ?>:</label>
+            <div class="control">
+                <select name="ekr_params[mm_reference_product]"
+                    data-code="attributemm_reference_product"
+                    id="attributemm_reference_product" >
+                    <?php foreach($referenceProducts as $reference):
+                        $selected = ($reference->width == $default_width)? "selected" : ""; ?>
+                        <option value="<?php echo $reference->entity_id; ?>" <?php echo $selected; ?>><?php echo $reference->width . "mm"; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    <?php endif; ?>
+    <!-- engraving select -->
+    <input type="hidden" name="ekr_params[engraving][text]" value="<?php if(@$_GET['engraving_text']) echo $_GET['engraving_text']; ?>" id="ekr_params-engraving-text" />
+    <input type="hidden" name="ekr_params[engraving][font]" value="<?php if(@$_GET['engraving_font']) echo $_GET['engraving_text']; ?>" id="ekr_params-engraving-font" />
+    <input type="hidden" name="ekr_params[engraving][location]" value="<?php if(@$_GET['engraving_location']) echo $_GET['engraving_text']; ?>" id="ekr_params-engraving-location"/>
+    <div class="field configurable select overlay-select">
+        <label class="label" for="attributeengraving"><?php echo __('Engraving'); ?>:</label>
+        <div class="control">
+            <div class="ekr_attribute-handler" data-id="engraving" data-code="engraving"></div>
+            <select name="ekr_params[add_engraving]"
+                data-code="engraving"
+                id="attributeengraving" >
+                    <option value="0"><?php /* @escapeNotVerified */ echo __('None') ?></option>
+                    <?php if(@$_GET['engraving_text']): ?>
+                        <option value="1" selected><?php echo $_GET['engraving_text']; ?></option>
+                    <?php endif; ?>
+            </select>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="field text">
+        <label class="label" for="attributenotes" style="min-height:auto;height:auto;"><?php echo __("Notes"); ?>:</label>
+        <div class="control cs-notes">
+            <input type="text" placeholder="<?php /* @escapeNotVerified */ echo __('Notes for Customer Service...'); ?>" name="ekr_params[product_notes]" id="attribute_product_notes" class="product-notes-text" />
+        </div>
+    </div>
     <?php
         $jsonConfig = json_decode($this->getJsonConfig());
+        // save if user is logged in
+        $is_logged_in = $helper->isLoggedIn();
+        $jsonConfig->configurable_product_id = $_product->getEntityId();
+        $jsonConfig->is_customer_logged_in = $helper->isLoggedIn();
+        // engraving pricing.
+        $jsonConfig->engraving = (object) [
+            'inside_pricing' => ($is_logged_in)? 15 : 30,
+            'outside_pricing' => ($is_logged_in)? 30: 60,
+        ];
         $jsonConfig->attributes->finish = $finishes;
         $jsonConfig->attributes->ring_size = (object) [
             "id"=>"ring_size",
@@ -125,7 +210,32 @@ if ($_product->isSaleable() && count($_attributes)):?>
             "options" => (object) []
         ];
         $jsonConfig->finish_prices = $finishesPrices;
+        // call for pricing
+        switch($_product->getData('ekr_call_for_price_size')){
+            case 295:
+                $jsonConfig->call_for_pricing = "always";
+            break;
+            case 294:
+                $jsonConfig->call_for_pricing = "on_size";
+            break;
+            default:
+                $jsonConfig->call_for_pricing = "none";
+            break;
+        }
 
+        $jsonConfig->attributes->engraving = (object) [
+            "id"=>"engraving",
+            "code" => "engraving",
+            "label" => "Engraving",
+            "options" => (object) []
+        ];
+
+        // ring mm width
+        $jsonConfig->default_mm_width = $_product->getData('ekr_default_mm_width');
+        $jsonConfig->has_width_range = !empty($_product->getData('ekr_product_width_range'));
+        //$jsonConfig->has_width_range = true;
+       
+        
         // get customer price multiplier
         $multiplier = $helper->getCustomerPriceMultiplier();
 
@@ -134,7 +244,6 @@ if ($_product->isSaleable() && count($_attributes)):?>
         $jsonConfig->prices->basePrice->amount = $jsonConfig->prices->basePrice->amount * $multiplier;
         $jsonConfig->prices->finalPrice->amount = $jsonConfig->prices->finalPrice->amount * $multiplier;
         $jsonConfig->prices->oldPrice->amount = $jsonConfig->prices->oldPrice->amount * $multiplier;
-
         foreach($jsonConfig->optionPrices as $index => $values){
             $jsonConfig->optionPrices->$index->basePrice->amount = $jsonConfig->optionPrices->$index->basePrice->amount * $multiplier;
             $jsonConfig->optionPrices->$index->finalPrice->amount = $jsonConfig->optionPrices->$index->finalPrice->amount * $multiplier;
@@ -145,7 +254,6 @@ if ($_product->isSaleable() && count($_attributes)):?>
         $tableName = $resource->getTableName("catalog_product_entity_varchar"); //gives table name with prefix
 
         // print_r($jsonConfig->images );
-
 
         foreach($jsonConfig->images as $product_id => $images):
             $fimg = @$imagesFinishes[$product_id];

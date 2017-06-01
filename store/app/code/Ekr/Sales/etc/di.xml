@@ -3,6 +3,7 @@
    <preference for="\Magento\Sales\Block\Order\View" type="Ekr\Sales\Block\Order\View" />
    <preference for="\Magento\Sales\Block\Order\History" type="Ekr\Sales\Block\Order\History" />
    <preference for="\Magento\Sales\Controller\AbstractController\OrderViewAuthorization" type="Ekr\Sales\Controller\AbstractController\OrderViewAuthorization" />
+   <preference for="\Magento\Sales\Block\Adminhtml\Items\Column\Name" type="Ekr\Sales\Block\Adminhtml\Items\Column\Name" />
    <type name="Ekr\Sales\Logger\Handler">
         <arguments>
             <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>

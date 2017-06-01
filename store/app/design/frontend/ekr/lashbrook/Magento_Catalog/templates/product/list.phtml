@@ -24,6 +24,7 @@ $category_id = null;
 if($category):
     $category_id = $category->getId();
 endif;
+$block->setCategory($category);
 echo $block->getToolbarHtml();
 ?>
 <?php if (!$_productCollection->count()): ?>
@@ -74,7 +75,7 @@ $pos = $block->getPositioned();
                     <strong class="product name product-item-name">
                         <a class="product-item-link"
                            href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($_product,['category_id' => @$category_id]) ?>">
-                            <?php /* @escapeNotVerified */ echo $_helper->productAttribute($_product, $_product->getName(), 'name'); ?>
+                            <?php /* @escapeNotVerified */ echo $block->getProductName($_product,$_helper); ?>
                         </a>
                     </strong>
                     <?php echo $block->getReviewsSummaryHtml($_product, $templateType); ?>

@@ -57,6 +57,28 @@ class CheckoutProductAddAfter implements \Magento\Framework\Event\ObserverInterf
 			'label' => __("Finish"),
 			'value' => $finishProduct->getName()
 		];
+
+		// engraving options.
+		$engraving = @$ekr_params['engraving'];
+		$engravingOption = [];
+		if(!empty($engraving)){
+			// font name.
+			if(!empty($engraving['text'])){
+				$engravingOption = [
+					'label' => __("Engraving"),
+					'value' => $engraving['font'] .' | ' . $engraving['location'] .' | ' . $engraving['text']
+				];
+			}
+		}
+
+		$notesOption = [];
+		$product_notes = @$ekr_params['product_notes'];
+		if(!empty($product_notes)){
+			$notesOption = [
+				'label' => __("Notes"),
+				'value' => $product_notes
+			];
+		}
 		
 		// ring size
 		$ring_size = $ekr_params['ring_size'];
@@ -104,6 +126,18 @@ class CheckoutProductAddAfter implements \Magento\Framework\Event\ObserverInterf
 
 		$newPrice = $newPrice * $multiplier;
 
+		// change price based on engraving.
+		if(!empty($engravingOption)){
+			// location.
+			if($engraving['location'] == "outside"){
+				$ePrice = 30;
+			}else{
+				// inside (zirconium?)
+				$ePrice = ($simpleProduct->getData('base_metal') == 11)? 30 : 15;
+			}
+			$newPrice += $ePrice;
+		}
+
 		// Set the custom price
         $item->setCustomPrice($newPrice);
         $item->setOriginalCustomPrice($newPrice);
@@ -114,6 +148,8 @@ class CheckoutProductAddAfter implements \Magento\Framework\Event\ObserverInterf
 		$additionalOptions = [];
 		if(!empty($finishOption)) $additionalOptions[] = $finishOption;
 		if(!empty($sizeOption)) $additionalOptions[] = $sizeOption;
+		if(!empty($engravingOption)) $additionalOptions[] = $engravingOption;
+		if(!empty($notesOption)) $additionalOptions[] = $notesOption;
 
 
 		//$this->_logger->info(print_r($additionalOptions));

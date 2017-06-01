@@ -313,7 +313,11 @@
                 bottom:0;
                 top:0;
             }
-
+            .ekr-scrollable-container{
+                &.overlay-scrollable{
+                    overflow: auto;
+                }
+            }
             .overlay-close{
                 .lib-overlay-close();
             }
@@ -361,6 +365,274 @@
                     top:0;
                     overflow: auto;
                     height:70%;
+                }
+            }
+            .section-title{
+                color: #ffffff;
+                font-weight: 700;
+                text-align: center;
+                margin-bottom: 20px;
+                font-size: 20px;
+            }
+            /* engraving overlay */
+            &.ring-engraving{
+                .font-options{
+                    color: @color-white;
+                    .attribute-values{
+                        
+                        ul#font-options{
+                            li{
+                                cursor: pointer;
+                                float:left;
+                                width: 20%;
+                                color:@color-white;
+                                height: 27px;
+                                span{
+                                    position: relative;
+                                    &::before{
+                                        content: "•  ";
+                                        color: rgb(220, 198, 125);
+                                        padding-left: 0px;
+                                        display: none;
+                                        position: absolute;
+                                        top:-6px;
+                                        left:-20px;
+                                        font-size: 32px;
+                                        font-family: 'Open Sans Condensed', sans-serif !important;
+                                    }
+                                }
+                                &.selected{
+                                    span{
+                                        &::before{
+                                            display: inline-block;
+                                        }
+                                    }
+                                }
+                                @media screen and (max-width : 1116px){
+                                    width: 20px;
+                                }
+                                @media screen and (max-width : 1115px) and (min-width:901px) {
+                                    width: 25%;
+                                }
+                                @media screen and (max-width : 900px) and (min-width:746px) {
+                                    width: 33%;
+                                }
+                                @media screen and (max-width : 745px) {
+                                    width: 50%;
+                                }
+                                @media screen and (max-width : 450px) {
+                                    height:36px;
+                                }
+                            }
+                        }
+                        .custom-font{
+                            margin: 10px auto;
+                            color:@color-white;
+                            input{
+                                width:150px;
+                                background-color:rgba(0,0,0,0);
+                                border:0px;
+                                border-bottom:1px solid @color-white;
+                                display: inline-block;
+                                color: @color-white;
+                            }
+                            span{
+                                position: relative;
+                                i{
+                                    font-style: normal;
+                                    position: relative;
+                                    &::before{
+                                        content: "•  ";
+                                        color: rgb(220, 198, 125);
+                                        padding-left: 0px;
+                                        display: none;
+                                        position: absolute;
+                                        top:-6px;
+                                        left:-28px;
+                                        font-size: 32px;
+                                    }
+                                }
+                            }
+                            &.selected{
+                                span{
+                                    i{
+                                        &::before{
+                                            display: inline-block;
+                                        }
+                                    }
+                                }
+                            }
+                            .next-button{
+                                position: relative;
+                                opacity: 0;
+                                    display: none;
+                                    .transitionFadeOut(0.5s);
+                                &.show{
+                                    opacity: 1;
+                                    display: inline-block;
+                                    .transitionFadeIn(0.5s);
+                                }
+                                .select-custom-font{
+                                    position: absolute;
+                                    color:@color-white;
+                                    width: 35px;
+                                    left: 10px;
+                                    top: -10px;
+                                }
+                            }
+                        }
+                    }
+                    .selected-font{
+                        .font-name{
+                            color:@color-white;
+                            font-weight: @font-weight__bold;
+                            text-align: center;
+                            font-size: 20px;
+                        }
+                        .change-font{
+                            text-align: center;
+                            margin-top: 10px;
+                            #link_change-font{
+                                color:@secondary__color;
+                            }
+                        }
+                        hr{
+                            margin-bottom: 40px;
+                        }
+                    }
+                }
+                .engraving-options{
+                    width: 65%;
+                    margin: 0px auto;
+                    .engraving-location{
+                        .options{
+                            text-align: center;
+                            .loc-option{
+                                width:100px;
+                                display: inline-block;
+                                text-align: center;
+                                color:@color-white;
+                                line-height: 22px;
+                                position: relative;
+                                cursor: pointer;
+                                .price{
+                                    color:@secondary__color;
+                                }
+                                &.selected{
+                                    font-weight: @font-weight__bold;
+                                    &::before{
+                                        content: "• ";
+                                        color: @secondary__color;
+                                        padding-left: 0;
+                                        position: absolute;
+                                        top: 8px;
+                                        left: 0px;
+                                        font-size: 25px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .engraving-text{
+                        input{
+                            text-align: center;
+                            padding:10px 15px;
+                            height: auto;
+                            border: 1px solid @primary__color;
+                            font-size: 20px;
+                        }
+                        .characters-left{
+                            margin-top: 5px;
+                            text-align: center;
+                            color: @color-white;
+                        }
+                        .fit-disclaimer{
+                            opacity: 0;
+                            text-align: center;
+                            margin:5px auto;
+                            .transitionFadeOut(0.5s);
+                            color: @color-white;
+                            &.show{
+                                opacity: 1;
+                                .transitionFadeIn(0.5s);
+                            }
+                        }
+                    }
+                    @media screen and (max-width : 700px) {
+                        width: 100%;
+                    }
+                }
+                
+                .action-buttons{
+                    text-align: center;
+                    .action{
+                        .lib-button(
+                            @_button-background:@color-white,
+                            @_button-color:@color-gray42,
+                            @_button-padding: 7px 48px
+                        );
+                        text-transform: uppercase;
+                        font-size: @font-size__l;
+                        opacity: 0;
+                        display: none;
+                        .transitionFadeOut(0.5s);
+                        &.show{
+                            opacity: 1;
+                            display: inline-block;
+                            .transitionFadeIn(0.5s);
+                        }
+                        &.none{
+                            margin-right: 20px;
+                            @media screen and (max-width : 450px) {
+                                margin-right: 0px;
+                            }
+                        }
+                        @media screen and (max-width : 450px) {
+                            display: block;
+                            width: 100%;
+                            margin-bottom: 20px;
+                        }
+                    }
+                }
+                .arial{
+                    font-family: "Arial";
+                    font-size: 20px;
+                }
+                .lucida-calligraphy{
+                    font-family: "Lucida Calligraphy";
+                    font-size: 20px;
+                }
+                .lucia-bt{
+                    font-family: "Lucia BT";
+                    font-size:28px;
+                }
+                .bradley-handwriting{
+                    font-family: "Bradley Handwriting";
+                    font-size: 20px;
+                }
+                .french-script{
+                    font-family: "French Script";
+                    font-size:28px;
+                }
+                .times-new-roman{
+                    font-family: "TimesNewRomanPro";
+                    font-size: 20px;
+                }
+                .vladimir-script{
+                    font-family: "Vladimir Script";
+                    font-size: 20px;
+                }
+                .tempus-sans{
+                    font-family: "Tempus Sans";
+                    font-size: 20px;
+                }
+                .old-london{
+                    font-family: "Old London";
+                    font-size: 20px;
+                }
+                .kells-sd{
+                    font-family: "Kells SD";
+                    font-size: 20px;
                 }
             }
             /* inlay overlay */
@@ -511,6 +783,7 @@
                     }
                 }
             }
+
             .base-metals{
                 position: relative;
                 min-height: 50px;
@@ -1036,12 +1309,38 @@
             }
         }
     }
+}
 
-    .product-add-form {
-        &:extend(.abs-revert-field-type-desktop all);
+.product-add-form {
+    &:extend(.abs-revert-field-type-desktop all);
+    .field.text{
+        .control{
+            input{
+                border-width: 1px;
+            }
+        }
     }
 }
 
+.page-product-configurable{
+    .product-add-form{
+        .fieldset > .field:not(.choice) > .label{
+            height: 38px;
+            vertical-align: bottom;
+            display: table-cell;
+            padding: 0 0 6px 0;
+        }
+    }
+    .product-info-main{
+        .price-box{
+            .price-wrapper{
+                .price{
+                    display: inline;
+                }
+            }
+        }
+    }
+}
 //
 //  Desktop large
 //  _____________________________________________
@@ -1303,9 +1602,31 @@ body {
 
 
 .category-view {
-  padding-top: 0px;
-  position:relative;
-  /**********************/
+    padding-top: 0px;
+    position:relative;
+    /**********************/
+    &.bottom-banner{
+        .category-banner-content{
+            .banner_content{
+                h1.headline{
+                    font-size:33px;
+                    margin-bottom: 28px;
+                }
+                padding-top:50px;
+                padding-bottom:50px;
+                p{
+                    font-size:1.1em;
+                    margin-bottom: 28px;
+                }
+                a.button{
+                    margin-top:35px;
+                }
+                .classics-rings{
+                    margin: 0 auto;
+                }
+            }
+        }
+    }
 
     .category-image {
       position: absolute;
@@ -1314,7 +1635,7 @@ body {
       right: 0;
     }
 
-    #category_banner_content {
+    .category-banner-content {
       background-size: cover;
       background-position: top center;
 
@@ -1338,6 +1659,20 @@ body {
             @media screen and (max-width:700px){
                 font-size:@font-size__l;
             }
+            span{
+                font-family: 'Open Sans Condensed', sans-serif;
+                text-transform: uppercase;
+                font-weight: 300;
+                font-size: 16px;
+            }
+            &.classics{
+                line-height: 28px;
+                margin-bottom: 20px;
+                font-size:33px;
+                @media screen and (max-width: 700px){
+                    margin-bottom: 15px;
+                }
+            }
         }
         .subheadline {
             text-align: center;
@@ -1346,6 +1681,19 @@ body {
             color: @color-white;
             @media screen and (max-width:700px){
                 font-size:@font-size__s;
+            }
+        }
+        .classics-rings{
+            width:498px;
+            margin:0 auto 20px auto;
+            img{
+                width: 100%;
+            }
+            @media screen and (max-width: 700px){
+                width: 350px;
+            }
+            @media screen and (max-width: 400px){
+                width: 325px;
             }
         }
         .description {
@@ -1436,7 +1784,7 @@ body {
   }
 }
 
-.category-view #category_banner_content > *{
+.category-banner-content > *{
     margin-bottom: 0px;
 }
 
@@ -1672,4 +2020,30 @@ body {
             display: none;
         }
     }
+}
+.product-add-form .fieldset > .field:not(.choice) > .control{
+    &.cs-notes{
+        width: 50%;
+        @media only screen and (max-width: 650px){
+            width: 100%;
+        }
+    }
+}
+.product-item-name{
+    a.product-item-link{
+        .classics-label{
+            font-weight: 700;
+        }
+    }
+}
+.call-for-pricing{
+    color:@color-red10;
+    font-weight: 700;
+    font-family: "Idlewild SSm A", "Idlewild SSm B", sans-serif;
+    font-size: 10px;
+    line-height: 1.5em;
+}
+
+.message.info.empty{
+    margin:80px 0 11px;
 }
