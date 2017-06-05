@@ -39,7 +39,7 @@ class ListProduct extends \Magento\Catalog\Block\Product\ListProduct{
      * Product ring weight attribute ID (for -IS or -P products)
      * @var integer
      */
-    protected $weight_attribute_id = 158;
+    protected $weight_attribute_id = 159;
 
     /**
      * save product urls just in case they are requested again

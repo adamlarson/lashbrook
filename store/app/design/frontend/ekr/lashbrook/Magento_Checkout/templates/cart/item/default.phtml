@@ -24,21 +24,13 @@ if(isset($parentByChild[0])):
     $product_url = "/store/catalog/product/view/id/". $parent_id;
     $base_metal = $simple->getData('base_metal');
     $inlay = $simple->getData('inlay');
-    // get finish
-    $options = $block->getOptionList();
-    $finish = "";
-    foreach($options as $option):
-        if($option['label'] == "Finish"):
-            $finish = $option['value'];
-        endif;
-    endforeach;
+    $weight = $simple->getData('ring_weight_is_p');
+    $finish = $simple->getData('image_finish');
     $product_url .= (strpos($product_url,"?") === false)? "?" : "&";
     $product_url .= "base_metal={$base_metal}";
     if(!empty($inlay)) $product_url .= "&inlay={$inlay}";
-    if(!empty($finish)){
-        $fProduct = $productModel->loadByAttribute('name',$finish);
-        $product_url .= "&finish={$fProduct->getEntityId()}";
-    }
+    if(!empty($finish)) $product_url .= "&finish={$finish}";
+    if(!empty($weight)) $product_url .= "&weight={$weight}";
 endif;
 
 /** @var \Magento\Msrp\Helper\Data $helper */

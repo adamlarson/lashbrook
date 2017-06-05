@@ -285,14 +285,22 @@
         height:100%;
         cursor: pointer;
     }
-
-    .ekr-image-disclaimer{
-        color:@color-red10;
-        z-index: 999;
+    .product.media{
         position: relative;
-        width: 183px;
-        margin:0px auto;
-        top:68%;
+        .ekr-image-disclaimer{
+            color:@color-red10;
+            z-index: 999;
+            position: absolute;
+            /* width: 183px; */
+            margin: 0px auto;
+            top: 50%;
+            text-align: center;
+            left: 0;
+            right: 0;
+            padding: 15px 20%;
+            background-color: rgba(255,255,255,.5);
+            line-height: 1.3em;
+        }
     }
 
     .product-ekr-dropdowns{
@@ -2046,4 +2054,8 @@ body {
 
 .message.info.empty{
     margin:80px 0 11px;
+}
+
+.product-info-main .box-tocart, .product-options-bottom .box-tocart{
+    display: table;
 }

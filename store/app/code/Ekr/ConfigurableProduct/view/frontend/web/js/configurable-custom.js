@@ -30,6 +30,7 @@ define([
             '<% } %>',
             mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
             mediaGalleryInitial: "/store/pub/media/images/no-photo.png",
+            lastDisplayedImages:[],
             onlyMainImg: false,
             sizeOptions:{},
             ekrOverlays: null,
@@ -227,6 +228,7 @@ define([
                 ring_size: (ring_size == null)? '10.00' :  ring_size,
                 weight: (weight == null)? "" :  weight,
             };
+            this.options.originalUrlVars = this.options.urlVars;
 
             // Initial setting of various option values
             this._initializeOptions();
@@ -468,7 +470,6 @@ define([
             var images = [],
                 initialImages = $.extend(true, [], this.options.mediaGalleryInitial),
                 galleryObject = $(this.options.mediaGallerySelector).data('gallery');
-            
             if (this.options.spConfig.images[this.simpleProduct]) {
                 var possible = $.extend(true, [], this.options.spConfig.images[this.simpleProduct]);
                 var element = document.getElementById('attributefinish');
@@ -502,7 +503,7 @@ define([
                     $(this).remove();
                 });
                 var disclaimer = document.getElementById("ekr-image-disclaimer-hidden");
-                if (images.length) {
+                if (images.length > 0) {
                     images.map(function (img) {
                         img.type = 'image';
                     });
@@ -516,6 +517,7 @@ define([
                         $(this).remove();
                     });
                     //disclaimer.setAttribute('style',"display:none;");
+                    this.options.lastDisplayedImages = images;
                 } else {
                     // show blank image
 /*                    images = [
@@ -529,19 +531,15 @@ define([
                         }
                     ];*/
 
-                    var new_dis = $("#ekr-image-disclaimer-hidden").clone();
+                    /*if(this.options.lastDisplayedImages.length){
+                        galleryObject.updateData(this.options.lastDisplayedImages);
+                    }*/
+                    var $new_dis = $("#ekr-image-disclaimer-hidden").clone();
                     //new_dis.setAttribute('style',"");
 
-                    $(".fotorama__stage__frame").append($(new_dis));
-                    $(new_dis).addClass("ekr-image-disclaimer");
-                    $(new_dis).show();
-
-                    /*if (this.options.onlyMainImg) {
-                        updateGallery(initialImages);
-                    } else {
-                        galleryObject.updateData(this.options.mediaGalleryInitial);
-                        $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
-                    }*/
+                    $(".product.media").append($new_dis);
+                    $new_dis.addClass("ekr-image-disclaimer");
+                    $new_dis.show();
 //                    galleryObject.updateData(images);
                 }
 
@@ -641,9 +639,9 @@ define([
                 }
             }
             // ring weight and only one available option
-            if(attributeId == 158){
+            if(attributeId == 159){
                 var label = element.options[1].config.label;
-                var $me = $("#attribute158");
+                var $me = $("#attribute159");
                 if(element.options.length == 2){
                     //$me.val(element.options[1].config.id).trigger('change');
                     $me.closest('.field.configurable').hide();
@@ -700,6 +698,21 @@ define([
          */
         _reloadPrice: function () {
             $(this.options.priceHolderSelector).trigger('updatePrice', this._getPrices());
+            // check that required options are not empty
+            var widget = this;
+            setTimeout(function(){
+                var allSelected = true;
+                $('select[data-validate="{required:true}"]').each(function(){
+                    if(allSelected){
+                        if($(this).val() == "") allSelected = false;
+                    }
+                });
+                if(!allSelected){
+                    $(".price-final_price").hide();
+                }else{
+                    $(".price-final_price").show();
+                }
+            },0);
         },
 
         /**
@@ -1414,15 +1427,26 @@ define([
             var code = element.getAttribute('data-code');
             var urlVars = this.options.urlVars;
             var passed = urlVars[code];
+            var attribute_id = element.getAttribute('id').replace("attribute","");
             if(passed.length > 0){
                 this.options.urlVars[code] = ''; //reset value
-                var attribute_id = element.getAttribute('id').replace("attribute","");
+                
                 if(attribute_id == "ring_size"){
                     var $select = $(element);
                     var value = $select.find('option[ring_size="' + passed + '"]').attr('value');
                     $select.val(value).trigger('change');
                 }else{
                     this._ekrAttributeSelected(attribute_id,passed);
+                }
+            }else{
+                // check if options was not passed.
+                var assigned = this._ekrAllUrlValuesAssigned();
+                if(!assigned && attribute_id !="ring_size"){
+                    var $select = $(element);
+                    if($select.children().length > 1){
+                        var opt = $select.find('option').eq(1).attr('value'); 
+                        this._ekrAttributeSelected(attribute_id,opt);
+                    }
                 }
             }
             this._ekrTriggerChanges();
@@ -1447,6 +1471,13 @@ define([
             });
         },
         _ekrTriggerChanges:function(){
+            var empty = this._ekrAllUrlValuesAssigned();
+            if(!empty) return;
+            this._changeProductImage();
+            this._ekrGetProductSimpleInfo();
+            setTimeout(function(){$(".price").show(); },1000);
+        },
+        _ekrAllUrlValuesAssigned:function(){
             var empty = true;
             var index;
             for(var i in this.options.urlVars){
@@ -1456,10 +1487,7 @@ define([
                     break;
                 }
             }
-            if(!empty) return;
-            this._changeProductImage();
-            this._ekrGetProductSimpleInfo();
-            setTimeout(function(){$(".price").show(); },1000);
+            return empty;
         },
         _ekrConfigureRingWidthSelect:function(){
             var widget = this;
@@ -1558,7 +1586,7 @@ define([
                 },
                 {
                     name:'weight',
-                    value:$("#attribute158").val()
+                    value:$("#attribute159").val()
                 },
                 {
                     name:'finish',
