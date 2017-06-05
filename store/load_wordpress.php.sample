@@ -17,7 +17,7 @@ switch($com) {
         get_footer();
 
         $content = ob_get_contents();
-        $content = str_ireplace("http://lashbrook", "https://lashbrook", $content);
+        $content = str_ireplace("http://magento", "https://magento", $content);
         ob_clean();
         echo $content;
     break;
