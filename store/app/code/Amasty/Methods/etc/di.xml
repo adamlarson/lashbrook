@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2017 Amasty (https://www.amasty.com)
+ * @package Amasty_Methods
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Amasty\Methods\Model\Structure\Shipping" type="Amasty\Methods\Model\Structure">
+        <arguments>
+            <argument name="objectFactory" xsi:type="object">Amasty\Methods\Model\ShippingFactory</argument>
+            <argument name="objectCollectionFactory" xsi:type="object">Amasty\Methods\Model\ResourceModel\Shipping\CollectionFactory</argument>
+            <argument name="objectCode" xsi:type="string">shipping_method</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Amasty\Methods\Model\Structure\Payment" type="Amasty\Methods\Model\Structure">
+        <arguments>
+            <argument name="objectFactory" xsi:type="object">Amasty\Methods\Model\PaymentFactory</argument>
+            <argument name="objectCollectionFactory" xsi:type="object">Amasty\Methods\Model\ResourceModel\Payment\CollectionFactory</argument>
+            <argument name="objectCode" xsi:type="string">payment_method</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Quote\Model\Quote\Address">
+        <plugin name="Amasty_Methods::QuoteAddress" type="Amasty\Methods\Plugin\QuoteAddress"/>
+    </type>
+</config>

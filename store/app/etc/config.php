@@ -3,6 +3,7 @@ return array (
   'modules' => 
   array (
     'Amasty_Base' => 1,
+    'Amasty_Methods' => 1,
     'Magento_Store' => 1,
     'Ekr_Authorization' => 1,
     'Ekr_Cart' => 1,

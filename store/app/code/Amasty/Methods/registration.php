@@ -2,11 +2,11 @@
 /**
  * @author Amasty Team
  * @copyright Copyright (c) 2017 Amasty (https://www.amasty.com)
- * @package Amasty_Base
+ * @package Amasty_Methods
  */
 
 \Magento\Framework\Component\ComponentRegistrar::register(
     \Magento\Framework\Component\ComponentRegistrar::MODULE,
-    'Amasty_Base',
+    'Amasty_Methods',
     __DIR__
 );
