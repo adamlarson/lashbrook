@@ -28,7 +28,7 @@ if(is_plugin_active("lashbrook-magento-integration/lashbrook-magento-integration
 	define('LASHBROOK_DEFAULT_POST_ID',241); // post id for content
 	define('LASHBROOK_SIMPLE_TEMPLATE',plugin_dir_path(__FILE__) . "inc/template-simple.php");
 	define('LASHBROOK_ASSETS_URL',plugin_dir_url(__FILE__ ) ."src/assets/");
-	define('LASHBROOK_ASSET_VERSION','1.0');
+	define('LASHBROOK_ASSET_VERSION','3.0');
 
 	$charset = "utf8";
     $collation = "utf8_general_ci";
@@ -38,7 +38,7 @@ if(is_plugin_active("lashbrook-magento-integration/lashbrook-magento-integration
 	$lashbrook_capsole->addConnection([
 		'driver' => 'mysql',
 		'host' => DB_HOST,
-		'database' => 'magento2',
+		'database' => 'magento',
 		'username' => DB_USER,
 		'password' => DB_PASSWORD,
 		'charset' => $charset,

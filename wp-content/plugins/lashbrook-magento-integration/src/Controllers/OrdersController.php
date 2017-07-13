@@ -14,11 +14,15 @@
 	protected $nonce_action = 'lashbrook-nonce';
 
 	protected $authorize_order_action = "lashbrook_authorize_order";
+	protected $cancel_order_action = "lashbrook_cancel_order";
 
 	public function __construct(){
 		// ajax calls
 		add_action('wp_ajax_' . $this->authorize_order_action,[&$this,'authorizeOrder'],10);
 		add_action('wp_ajax_nopriv_' . $this->authorize_order_action,[&$this,'authorizeOrder'],10);
+
+		add_action('wp_ajax_' . $this->cancel_order_action,[&$this,'cancelOrder'],9);
+		add_action('wp_ajax_nopriv_' . $this->cancel_order_action,[&$this,'cancelOrder'],9);
 		
 		add_filter('the_posts', array(&$this, 'loadOrder'));
 		add_filter('template_include', [&$this,'overwriteTemplate'], 99 );
@@ -76,7 +80,9 @@
 			'nonce' => wp_create_nonce($this->nonce_action),
 			'order_token' => $this->order_token,
 			'actions' => array(
-				'authorize_order' => $this->authorize_order_action)
+				'authorize_order' => $this->authorize_order_action,
+				'cancel_order' => $this->cancel_order_action
+				)
 			]);
 	}
 
@@ -134,6 +140,41 @@
 		}
 	}
 
+	public function cancelOrder(){
+		$nonce = @$_POST['nonce'];
+		$verify = wp_verify_nonce($nonce, $this->nonce_action );
+		if(!empty($_POST) && $nonce && $verify){
+			$order_token = $_POST['order_token'];
+			$eauth = SalesOrderEauthToken::where(["eauth_token"=>$order_token])->first();
+			if($eauth != null){
+				$order = SalesOrder::where(["entity_id" => $eauth->sales_order_id])->first();
+				$order->update([
+					'state' => "canceled",
+					'status' => "canceled"]);
+				$Service = new MagentoService;
+				$Service->orderWasCancelled($order->entity_id);
+				die(json_encode([
+					'success' => true,
+					'order_token' => $order->entity_id,
+					'message' => __('<strong>Success!</strong> Order canceled successfully.','laskbrook-magento-integration')
+				]));
+			}else{
+				die(json_encode([
+					'success' => false,
+					'message' => "No eauth found"
+				]));
+			}
+		}else{
+			die(json_encode([
+					'success' => false,
+					'post' => $_POST,
+					'verify' => $verify,
+					'nonce' => $nonce,
+					'message' => "didn't pass verification"
+				]));
+		}
+	}
+
 	public function authorizeOrder(){
 		$nonce = @$_POST['nonce'];
 		if(!empty($_POST) && $nonce && wp_verify_nonce($nonce, $this->nonce_action )){
@@ -151,7 +192,7 @@
 				die(json_encode([
 					'success' => true,
 					'order_token' => $order->entity_id,
-					'message' => __('<strong>Success!</strong> Order successfully authorized. Please check your email for further info.','laskbrook-magento-integration')
+					'message' => __('<strong>Success!</strong> Order successfully authorized.','laskbrook-magento-integration')
 				]));
 			}
 		}		 

@@ -25,16 +25,26 @@
 			<?php echo apply_filters( 'the_content', $default_post->post_content ); ?>
 		</div>
 		<div class="col-md-6">
-
-			<div id="signature-div" style="<?php echo $signature_display; ?>">
-				<div class="alert alert-success"><?php echo __('<strong>Success!</strong> Order successfully authorized. Please check your email for further info.','laskbrook-magento-integration'); ?></div>
-				<img src="<?php echo $signature_source; ?>" id="user-signature" />
+			<div id="signature-box">
+				<div id="signature-div" style="<?php echo $signature_display; ?>">
+					<div class="alert alert-success"><?php echo __('<strong>Success!</strong> Order successfully authorized. Please check your email for further info.','laskbrook-magento-integration'); ?></div>
+					<img src="<?php echo $signature_source; ?>" id="user-signature" />
+				</div>
+				<?php if($order->status == "canceled"): ?>
+					<p class="text-center order-cancelled"><?php echo __('Order has been canceled.'); ?></p>
+				<?php else:
+					if(empty($signature_source)): ?>
+					<div id="auth-signature"></div>
+					<p class="text-center"><?php echo __('Sign above the line.','laskbrook-magento-integration'); ?></p>
+					<div class="text-center">
+						<button class="btn btn-primary" id="authorize-signature">Authorize</button> <button class="btn btn-secondary" id="reset-signature">Reset</button>
+					</div>
+					<?php endif; ?>
+				<?php endif;?>
 			</div>
-			<?php if(empty($signature_source)): ?>
-				<div id="auth-signature"></div>
-				<p class="text-center"><?php echo __('Sign above the line.','laskbrook-magento-integration'); ?></p>
-				<div class="text-center">
-					<button class="btn btn-primary" id="authorize-signature">Authorize</button> <button class="btn btn-secondary" id="reset-signature">Reset</button>
+			<?php if($order->status != "signed" && $order->status != "canceled"): ?>
+				<div id="cancel-order">
+					<a href="#" id="cancel-order">Cancel Order</a>
 				</div>
 			<?php endif; ?>
 		</div>

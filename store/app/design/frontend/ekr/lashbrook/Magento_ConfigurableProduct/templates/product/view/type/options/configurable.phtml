@@ -30,6 +30,7 @@ $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
 $connection = $resource->getConnection();
 $tableName = $resource->getTableName("catalog_product_entity_decimal"); //gives table name with prefix
 
+// get the price for all finishes.
 foreach($finishes['options'] as $finish):
     $sql = "Select value FROM " . $tableName . " WHERE `entity_id` = '". $finish['id'] ."' AND `attribute_id`='77'";
     $result = $connection->fetchAll($sql);
@@ -127,10 +128,16 @@ if ($_product->isSaleable() && count($_attributes)):?>
     <?php
     $ekr_product_width_range = $_product->getData('ekr_product_width_range');
     $default_width = $_product->getData('ekr_default_mm_width');
+    $ring_width = false;
     if(!empty($ekr_product_width_range)):
         $mm_range = explode('-',$ekr_product_width_range);
-        $start = $mm_range[0];
-        $end = $mm_range[1]; ?>
+        if(count($mm_range) > 1 ):
+            $start = $mm_range[0];
+            $end = $mm_range[1];
+            $ring_width = true;
+        endif; 
+    endif;
+    if($ring_width): ?>
         <!-- mm width range -->
         <div class="field configurable select">
             <label class="label" for="attributemm_width_from_range"><?php echo __('Ring<br>Width'); ?>:</label>

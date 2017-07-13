@@ -1,15 +1,98 @@
-// variables
-/*@import 'source/lib/variables/_tables.less';
-@import 'source/lib/variables/_email.less'; // Theme variables for emails
-@import 'source/lib/variables/_colors.less'; // colors
+@font_size_sml:12px;
+@font_size_reg:14px;
+@font_size_lrg:16px;
+@email_link_color:#1979c3;
+@email_max_width:600px;
+@email_body_color:#444;
 
-@import 'source/lib/variables/_typography.less';
-@import 'source/lib/_tables.less';
+*{
+    font-family: Arial,serif;
+    color:@email_body_color;
+    font-size:@font_size_reg;
+}
+table.wrapper{
+    max-width: @email_max_width;
+}
+a{
+    color:@email_link_color;
+}
 
+h3{
+    font-size: @font_size_lrg;
+}
 
-
-
-
-@import 'source/_email-base.less'; // Contains primary email styles
-@import 'source/_email-extend.less'; // Contains theme-specific adjustments to email styles */
-
+table{
+    &.order-details{
+        width: 100%;
+        td{
+            &.method-info{
+                width:50%;
+            }
+        }
+        .payment-method{
+            .title{
+                font-size:@font_size_sml;
+            }
+            .content{
+                margin:3px;
+            }
+        }
+    }
+    &.email-items{
+        width: 100%;
+        thead{
+            tr{
+                th{
+                    background-color: #EEE;
+                }
+            }
+        }
+        tbody{
+            tr{
+                td{
+                    vertical-align: top;
+                    &.item-price{
+                        text-align: right;
+                    }
+                }
+            }
+        }
+        .item-info{
+            p{
+                margin-top:0px;
+                margin-bottom:5px;
+            }
+            .product-name{
+                font-style: italic;
+                font-weight: bold;
+            }
+            .sku{
+                font-size:@font_size_sml;
+            }
+        }
+        .item-options{
+            margin:5px 0;
+            dt{
+                font-size:@font_size_sml;
+            }
+            dt{
+                font-size:@font_size_sml
+            }
+        }
+    }
+}
+tfoot.order-totals{
+    tr{
+        &.subtotal td,
+        &.shipping td,
+        &.grand_total td{
+            text-align: right;
+        }
+        &.subtotal th,
+        &.shipping th,
+        &.grand_total th{
+            text-align: right;
+            padding-right:10px;
+        }
+    }
+}

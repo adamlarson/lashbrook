@@ -12,6 +12,38 @@ jQuery(document).ready(function($){
 		lashbrook_resetSignature();
 	});
 
+	$("#cancel-order").on('click',function(e){
+		e.preventDefault();
+		var cancel = confirm('Are you sure you want to cancel this order?');
+		if(cancel){
+			var post = {
+				action: lashbrook.actions.cancel_order,
+				nonce: lashbrook.nonce,
+				order_token: lashbrook.order_token,
+			};
+			$.ajax({
+				url: lashbrook.ajax_url,
+				type: 'post',
+				dataType: 'json',
+				data: post,
+				success:function(response){
+					if(response.success){
+						var alert = "<div class=\"alert alert-success\">" + response.message + "</div>";
+						$("#signature-div").fadeOut('fast');
+						$("#cancel-order").fadeOut('fast',function(){
+							$(this).html(alert).fadeIn();
+						});
+					}else{
+						// didn't work
+					}
+				},
+				error: function(jqXhr, textStatus, errorThrown){
+					console.log(errorThrown);
+				}
+			});
+		}
+	});
+
 	var $btnAuthorizeSignature = $("#authorize-signature");
 	$btnAuthorizeSignature.on('click',function(e){
 		e.preventDefault();
@@ -43,7 +75,7 @@ jQuery(document).ready(function($){
 			success:function(response){
 				if(response.success){
 					var alert = "<div class=\"alert alert-success\">" + response.message + "</div>";
-					$("#signature-div").fadeOut('fast',function(){
+					$("#signature-div,#cancel-order").fadeOut('fast',function(){
 						$(this).html(alert).fadeIn();
 					});
 				}else{

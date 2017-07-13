@@ -102,12 +102,12 @@ class View extends \Magento\Sales\Block\Order\View{
     		// check if user requires parent approval and 
     		// the parent is not logged in
     		if( $this->requiresParentApproval($customer_id) && 
-    			$loggedId != $parent_id){
-    				return false;
+    			$loggedId == $parent_id){
+    				return true;
     		}
     	}
 
-    	return true;
+    	return false;
 
     }
 

@@ -44,7 +44,13 @@ class AdminCustomerPrepareSave  implements \Magento\Framework\Event\ObserverInte
 
 		$data = $request->getParam('customer');
 		$approved = $data[$this->status_key];
-		$this->_logger->info("customer id: " . $customerData->getId());
+		$customer_id = $customerData->getId();
+		$this->_logger->info("customer id: " . $customer_id);
+
+		if(empty($customer_id)){
+			$this->_logger->info("customer is being created");
+			return;
+		}
 
 		$customer = $this->getCustomer($customerData->getId());
 		$attValue = $customer->getCustomAttribute($this->status_key);
@@ -75,7 +81,7 @@ class AdminCustomerPrepareSave  implements \Magento\Framework\Event\ObserverInte
 				$this->sendEmail($customer->getEmail(),$data,$this->template_approved);
 			}else{
 				// send email that account was denied.
-				$this->sendEmail($customer->getEmail(),$data,$this->template_denied);
+				//$this->sendEmail($customer->getEmail(),$data,$this->template_denied);
 			}
 		}
 	}

@@ -9,7 +9,7 @@ add_filter('the_content', 'filter_ptags_on_images');
 // Scripts
 
 function custom_style() { 
-    wp_register_style('my-style',get_bloginfo( 'stylesheet_directory' ) . '/css/style.css',false,0.1);
+    wp_register_style('my-style',get_bloginfo( 'stylesheet_directory' ) . '/css/style.css',false,0.3);
     wp_enqueue_style( 'my-style' );
     wp_enqueue_script('owl-carousel', get_stylesheet_directory_uri() . '/js/owl.carousel.js', array( 'jquery' ));
 } add_action( 'wp_enqueue_scripts', 'custom_style' ); 

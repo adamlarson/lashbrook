@@ -8,7 +8,7 @@
 	 * Magento REST api url
 	 * @var string
 	 */
-	protected $rest_api_url = "http://magento.elikirk-dev.com/store/index.php/rest/V1/";
+	protected $rest_api_url;
 
 	protected $order_status_signed = "signed";
 
@@ -16,13 +16,13 @@
 	 * magento username
 	 * @var string
 	 */
-	protected $username = "webapi";
+	protected $username;
 
 	/**
 	 * magento password
 	 * @var string
 	 */
-	protected $password = "bea3MiiUp";
+	protected $password;
 
 	/**
 	 * magento api token
@@ -31,7 +31,9 @@
 	protected $api_token = null;
 
 	function __construct(){
-
+		$this->username = MG_API_USER;
+		$this->password = MG_API_PASS;
+		$this->rest_api_url = MG_API_URL;
 		$this->api_token = $this->getToken();
 	}
 
@@ -74,6 +76,19 @@
 			$order_id,
 			$this->order_status_signed,
 			"Order has been signed and authorized by customer."
+		);
+	}
+
+	/**
+	 * add a note.
+	 * @param  [type] $order_id [description]
+	 * @return [type]           [description]
+	 */
+	public function orderWasCancelled($order_id){
+		return $this->addOrderComment(
+			$order_id,
+			$this->order_status_signed,
+			"Order was canceled by parent account."
 		);
 	}
 

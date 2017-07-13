@@ -2326,6 +2326,9 @@ div.wrapper .header-search button i::before{
   .header-search-responsive{
     display: block;
   }
+  #phplive_btn_1496173713 img{
+    width:150px;
+  }
 }
 
 .col-md-4{

@@ -124,7 +124,7 @@ class CustomerRegisterSuccess implements ObserverInterface
         $senderName  = $this->scopeInterface->getValue('trans_email/ident_support/name',\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
 */
         $senderName = "Retail Account Request";
-        $senderEmail = "retail_accounts@elikirk-dev.com";
+        $senderEmail = "info@lashbrookdesigns.com";
         
         $sender = [
                     'name' => $senderName,

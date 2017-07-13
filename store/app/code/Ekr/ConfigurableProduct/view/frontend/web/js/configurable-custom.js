@@ -221,6 +221,7 @@ define([
             var weight = this._ekrGetParameterByName('weight');
             var ring_size = this._ekrGetParameterByName('ring_size');
 
+
             this.options.urlVars = {
                 base_metal: (base_metal == null)? "" :   base_metal,
                 inlay: (inlay == null)? "" :   inlay,
@@ -254,7 +255,7 @@ define([
             // initialize mm ring width select
             this._ekrConfigureRingWidthSelect();
 
-            console.log(this.options.spConfig);
+            //console.log(this.options.spConfig);
 
             if(this.options.spConfig.call_for_pricing == "always"){
                 this._ekrCallForPricing(true);
@@ -467,6 +468,7 @@ define([
          * @private
          */
         _changeProductImage: function () {
+            //console.log("product_image");
             var images = [],
                 initialImages = $.extend(true, [], this.options.mediaGalleryInitial),
                 galleryObject = $(this.options.mediaGallerySelector).data('gallery');
@@ -583,6 +585,7 @@ define([
          * @param {*} element - Element associated with a configurable option.
          */
         _fillSelect: function (element) {
+            //console.log(element);
             var attributeId = element.id.replace("attribute", ''),
                 match = false,
                 options = this._getAttributeOptions(attributeId),
@@ -599,7 +602,6 @@ define([
             if (element.prevSetting) {
                 prevConfig = element.prevSetting.options[element.prevSetting.selectedIndex];
             }
-
             if (options) {
                 for (i = 0; i < options.length; i++) {
                     allowedProducts = [];
@@ -635,25 +637,19 @@ define([
                     setTimeout(function(){
                         widget._ekrAssignPreselectedValue(element);
                     },100);
-
                 }
             }
-            // ring weight and only one available option
             if(attributeId == 159){
                 var label = element.options[1].config.label;
                 var $me = $("#attribute159");
+                this.options.urlVars.weight = "";
                 if(element.options.length == 2){
                     //$me.val(element.options[1].config.id).trigger('change');
                     $me.closest('.field.configurable').hide();
-                    var widget = this;
-                    setTimeout(function(){
-                        widget._ekrAttributeSelected(attributeId,element.options[1].config.id);
-                    },300);
                 }else{
                     $me.closest('.field.configurable').show();
                 }
             }
-            
         },
 
         /**
@@ -711,6 +707,7 @@ define([
                     $(".price-final_price").hide();
                 }else{
                     $(".price-final_price").show();
+                    widget._ekrCheckCallForPricing();
                 }
             },0);
         },
@@ -1332,7 +1329,10 @@ define([
         _ekrAttributeSelected: function(attribute_id,value_id){
             var $select = $("#attribute" + attribute_id);
             if($select.find('option[value="' + value_id + '"]')){
-                $("#attribute" + attribute_id).val(value_id).trigger("change");
+                $select.val(value_id);
+                setTimeout(function(){
+                    $select.trigger("change");
+                });
             }
         },
 
@@ -1428,6 +1428,11 @@ define([
             var urlVars = this.options.urlVars;
             var passed = urlVars[code];
             var attribute_id = element.getAttribute('id').replace("attribute","");
+            //console.log(element);
+            //console.log(this.options.urlVars);
+            //console.log("code: " + code);
+            //console.log("attribute_id: " + attribute_id);
+            //console.log("passed: " + passed);
             if(passed.length > 0){
                 this.options.urlVars[code] = ''; //reset value
                 
@@ -1472,12 +1477,15 @@ define([
         },
         _ekrTriggerChanges:function(){
             var empty = this._ekrAllUrlValuesAssigned();
+            console.log("triggering changes: " + empty);
+
             if(!empty) return;
             this._changeProductImage();
             this._ekrGetProductSimpleInfo();
             setTimeout(function(){$(".price").show(); },1000);
         },
         _ekrAllUrlValuesAssigned:function(){
+            console.log(this.options.urlVars);
             var empty = true;
             var index;
             for(var i in this.options.urlVars){
@@ -1525,9 +1533,9 @@ define([
                 case "on_size":
                     var $ringSize = $("#attributering_size");
                     var ring_size = $ringSize.find('option[value="' + $ringSize.val() + '"]').text();
-                    console.log($ringSize);
-                    console.log($ringSize.find('option[value="' + $ringSize.val() + '"]'));
-                    console.log(ring_size);
+                    //console.log($ringSize);
+                    //console.log($ringSize.find('option[value="' + $ringSize.val() + '"]'));
+                    //console.log(ring_size);
                     callForPricing = (ring_size != "10.00");
                 break;
             }
@@ -1547,10 +1555,12 @@ define([
         },
         _ekrCallForPricing:function(call_for_pricing){
             if(call_for_pricing){
-                $(".price-final_price,#product-addtocart-button").hide();
+                $(".price-final_price").hide();
+                $("#product-addtocart-button").hide();
                 $("#ekr-call-for-pricing").show();
             }else{
-                $(".price-final_price,#product-addtocart-button").show();
+                $(".price-final_price").show();
+                $("#product-addtocart-button").show();
                 $("#ekr-call-for-pricing").hide();
             }
         },
@@ -1610,8 +1620,8 @@ define([
                 },           
             ];
             variables.forEach(function(e){
-                console.log("name" + e.name);
-                console.log(typeof e.name);
+                //console.log("name" + e.name);
+                //console.log(typeof e.name);
                 if( typeof e.value !== 'undefined' ) {
                     if(e.value.length > 0)
                         stringUrl += e.name + "=" + e.value + "&";

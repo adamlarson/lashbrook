@@ -71,12 +71,6 @@ class EmailOrderSetTemplateVarsBefore implements \Magento\Framework\Event\Observ
 		$this->_logger->info("got transport");
 
 		$this->_tokensTableName = $this->dbResource->getTableName("sales_order_eauth_tokens"); //gives table name with prefix
-		
-		// create token
-		$token = $this->createEAuthRecord($transport);
-		$tokenUrl = "http://" . $_SERVER['HTTP_HOST'] . "/lashbrook-order-verification/". $token;
-		
-		$this->_logger->info("token_url: " . $tokenUrl);
 
 		$order = $transport->getOrder();
 		$this->_logger->info('got order');
@@ -84,13 +78,18 @@ class EmailOrderSetTemplateVarsBefore implements \Magento\Framework\Event\Observ
 		$this->_logger->info("customer id " . $customer_id);
 		$parent_id = $this->getParentAccountId($customer_id);
 		$this->_logger->info("customers parent account " . $parent_id);
-		$ask_approval = true;
+		$requires_approval = false;
 		// if user has parent
 		if($parent_id){
 			$this->_logger->info("has parent id");
-			$ask_approval  = (!$this->requiresParentApproval($customer_id));
-			$this->_logger->info("ask customer for order approval? {$ask_approval}");
-			if(!$ask_approval){
+			$requires_approval  = $this->requiresParentApproval($customer_id);
+			$this->_logger->info("ask customer for order approval? {$requires_approval}");
+			if($requires_approval){
+        // create token
+        $token = $this->createEAuthRecord($transport);
+        $tokenUrl = "http://" . $_SERVER['HTTP_HOST'] . "/lashbrook-order-verification/". $token;
+    
+        $this->_logger->info("token_url: " . $tokenUrl);
 				$this->_logger->info("no. Parent needs to approve it");
 				$parent = $this->_customerRepositoryInterface->getById($parent_id);
 				$this->_logger->info("customer loaded");
@@ -100,7 +99,7 @@ class EmailOrderSetTemplateVarsBefore implements \Magento\Framework\Event\Observ
 
 		// save in transport.
 		$transport->setData('token_url',$tokenUrl);
-		$transport->setData('ask_approval',$ask_approval);
+		$transport->setData('ask_approval',$requires_approval);
 
 		$this->_logger->info("now send mail email. ");
 

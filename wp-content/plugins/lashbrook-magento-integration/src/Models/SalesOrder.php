@@ -32,7 +32,9 @@ class SalesOrder extends Model {
      * list of fields to allow mass assignment
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+    'status',
+    'state'];
 
     /**
      * Sales Order Addresses
